@@ -20,7 +20,10 @@ USE `project_manager` ;
 CREATE TABLE IF NOT EXISTS `project_manager`.`Usuario` (
   `idUsuario` INT NOT NULL,
   `nome` VARCHAR(45) NULL,
-  PRIMARY KEY (`idUsuario`))
+  `username` VARCHAR(45) NOT NULL,
+  `nascimento` DATE NULL,
+  PRIMARY KEY (`idUsuario`),
+  UNIQUE INDEX `email_UNIQUE` (`username` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -50,10 +53,10 @@ CREATE TABLE IF NOT EXISTS `project_manager`.`Projeto` (
   `descricao` VARCHAR(45) NULL,
   `data_fim` DATE NULL,
   PRIMARY KEY (`idProjeto`),
-  INDEX `fk_Projeto_Gerente1_idx` (`idGerente` ASC) VISIBLE,
-  CONSTRAINT `fk_Projeto_Gerente1`
+  INDEX `fk_Projeto_Usuario1_idx` (`idGerente` ASC) VISIBLE,
+  CONSTRAINT `fk_Projeto_Usuario1`
     FOREIGN KEY (`idGerente`)
-    REFERENCES `project_manager`.`Gerente` (`idUsuario`)
+    REFERENCES `project_manager`.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -112,9 +115,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `project_manager`.`Participa`
+-- Table `project_manager`.`Usuario_Projeto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_manager`.`Participa` (
+CREATE TABLE IF NOT EXISTS `project_manager`.`Usuario_Projeto` (
   `idUsuario` INT NOT NULL,
   `idProjeto` INT NOT NULL,
   PRIMARY KEY (`idUsuario`, `idProjeto`),
@@ -133,9 +136,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `project_manager`.`Recebe`
+-- Table `project_manager`.`Usuario_Tarefa`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_manager`.`Recebe` (
+CREATE TABLE IF NOT EXISTS `project_manager`.`Usuario_Tarefa` (
   `idUsuario` INT NOT NULL,
   `idTarefa` INT NOT NULL,
   PRIMARY KEY (`idUsuario`, `idTarefa`),
@@ -154,18 +157,17 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `project_manager`.`Cred`
+-- Table `project_manager`.`Credenciais`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_manager`.`Cred` (
-  `Usuario_idUsuario` INT NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
+CREATE TABLE IF NOT EXISTS `project_manager`.`Credenciais` (
+  `username` VARCHAR(45) NOT NULL,
   `senha` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`Usuario_idUsuario`),
-  CONSTRAINT `fk_cred_Usuario1`
-    FOREIGN KEY (`Usuario_idUsuario`)
-    REFERENCES `project_manager`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`username`),
+  CONSTRAINT `fk_Credenciais_Usuario1`
+    FOREIGN KEY (`username`)
+    REFERENCES `project_manager`.`Usuario` (`username`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
