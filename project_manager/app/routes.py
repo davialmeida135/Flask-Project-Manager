@@ -11,6 +11,7 @@ from flask import (
 )
 
 from .db import get_db
+from .db import usuario
 
 main = Blueprint("main", __name__)
 
@@ -21,12 +22,7 @@ def get_room_types():
 
 @main.get("/")
 def index():
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM employee")
-    employees = cursor.fetchall()
-    for emp in employees:
-        print(emp)
+    usuario.get()
     bookings = []
     return render_template("list.html", bookings=bookings)
 
