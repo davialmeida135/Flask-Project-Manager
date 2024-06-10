@@ -14,10 +14,10 @@ def create_app():
     login_manager.init_app(app)
     app.register_blueprint(main)
 
-    from app.home import bp as home_bp
+    from app.paginas.home import bp as home_bp
     app.register_blueprint(home_bp)
 
-    from app.projeto import bp as projeto_bp
+    from app.paginas.projeto import bp as projeto_bp
     app.register_blueprint(projeto_bp, url_prefix='/projetos')
 
     return app
