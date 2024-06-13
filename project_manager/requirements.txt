@@ -12,3 +12,4 @@ Werkzeug==2.0.3
 zipp==3.7.0
 flask_mysqldb
 flask_login
+marshmallow

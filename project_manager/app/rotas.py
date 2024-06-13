@@ -11,7 +11,7 @@ from flask import (
 )
 
 from .db import get_db
-from .db import usuario
+from .db import usuario,tarefa
 
 main = Blueprint("main", __name__)
 
@@ -22,9 +22,10 @@ def get_room_types():
 
 @main.get("/")
 def index():
-    usuario.get()
+    print(tarefa.get_all_tarefas())
+    print("batata")
     bookings = []
-    return render_template("list.html", bookings=bookings)
+    return render_template("create_tarefa.html")
 
 @main.post("/create")
 def create_post():

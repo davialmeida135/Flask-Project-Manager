@@ -1,4 +1,4 @@
-from db import get_db
+from . import get_db
 
 def get_all_tarefas():
     db = get_db()
@@ -22,11 +22,11 @@ def create_tarefa(nome, data_criacao, descricao, prazo, status, idProjeto, idUsu
     db = get_db()
     cursor = db.cursor()
     query = """
-    START TRANSACTION
-    INSERT INTO Tarefa (nome, data_criacao, descricao, prazo, status, idProjeto)
-    VALUES (%s, %s, %s, %s, %s, %s)
-    SET @last_tarefa_id = LAST_INSERT_ID();
-    """
+        START TRANSACTION
+        INSERT INTO Tarefa (nome, data_criacao, descricao, prazo, status, idProjeto)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        SET @last_tarefa_id = LAST_INSERT_ID();
+        """
     cursor.execute(query, (nome, data_criacao, descricao, prazo, status, idProjeto))
 
     for idUsuario in idUsuarios:

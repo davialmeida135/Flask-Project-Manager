@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Tarefa</title>
+</head>
+<body>
+    <h1>Create Tarefa</h1>
+    <form method="POST" action="/tarefas/new">
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome"><br>
+        <label for="data_criacao">Data de Criação:</label><br>
+        <input type="date" id="data_criacao" name="data_criacao"><br>
+        <label for="descricao">Descrição:</label><br>
+        <textarea id="descricao" name="descricao"></textarea><br>
+        <label for="prazo">Prazo:</label><br>
+        <input type="date" id="prazo" name="prazo"><br>
+        <label for="status">Status:</label><br>
+        <input type="text" id="status" name="status"><br>
+        <label for="idProjeto">ID do Projeto:</label><br>
+        <input type="number" id="idProjeto" name="idProjeto"><br>
+        <label for="idUsuarios">IDs dos Usuários (separados por vírgula):</label><br>
+        <input type="text" id="idUsuarios" name="idUsuarios"><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

@@ -6,9 +6,8 @@ Sequência para uso do programa
 Sobre a estrutura: O que define um pacote é a existência de um __init__.py, mesmo que vazio
 - Pasta app é o programa
 - Pacote db: possui a conexão para o db e cada classe dentro dele é o equivalente a um Repository ou DAO
-- Pacote home: é o pacote para o path inicial do programa (páginas com "/") #Acho que vou renomear ou reorganizar para ficar mais legivel
-- Pacote projeto: é o pacote para o path de projeto ("páginas com "/projeto") #Acho que vou renomear ou reorganizar para ficar mais legivel
+- Pacote routes: define as rotas e visões
 - Pacote model: os models das classes
 - Pacote service: os services
 - __init__py: Inicializa o app com as configurações corretas
-- routes.py: exemplo de rotas
+- rotas.py: exemplo de rotas
