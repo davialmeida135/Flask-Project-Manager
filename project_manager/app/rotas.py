@@ -1,6 +1,6 @@
 import random
 import string
-
+import datetime
 from flask import (
     abort,
     Blueprint, 
@@ -11,7 +11,7 @@ from flask import (
 )
 
 from .db import get_db
-from .db import usuario,tarefa
+from .db import usuario,tarefa,projeto
 
 main = Blueprint("main", __name__)
 
@@ -22,9 +22,8 @@ def get_room_types():
 
 @main.get("/")
 def index():
-    print(tarefa.get_all_tarefas())
-    print("batata")
-    bookings = []
+    #projeto.create_projeto(1,datetime.datetime.now(),"projetaoaoaoao","descriptiotnt", datetime.datetime.now(),[1,2,3])
+    #tarefa.create_tarefa("novatarefa", datetime.datetime.now(), "descrição legal", datetime.datetime.now(), "em andamento", 1, [1,2,3])
     return render_template("create_tarefa.html")
 
 @main.post("/create")

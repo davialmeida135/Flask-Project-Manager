@@ -10,6 +10,7 @@ from flask import (
 from marshmallow import Schema, fields
 tarefa_bp = Blueprint('tarefa', __name__)
 
+#TODO Definir em uma classe propria, idealmente junto do model
 class TarefaSchema(Schema):
     nome = fields.Str(required=False)
     data_criacao = fields.Date(required=False) #Será definido no codigo
@@ -17,7 +18,7 @@ class TarefaSchema(Schema):
     prazo = fields.Date(required=False)
     status = fields.Str(required=False) #Opções seletas
     idProjeto = fields.Int(required=False) #Será pré definido
-    idUsuarios = fields.String( required=False) #Sera definido na tela
+    idUsuarios = fields.String( required=False) #Sera definido na tela/ Trocar para list
 
 
 

@@ -21,23 +21,24 @@ def get_tarefa_by_id(idTarefa):
 def create_tarefa(nome, data_criacao, descricao, prazo, status, idProjeto, idUsuarios : list):
     db = get_db()
     cursor = db.cursor()
+    cursor.execute("START TRANSACTION")
     query = """
-        START TRANSACTION
         INSERT INTO Tarefa (nome, data_criacao, descricao, prazo, status, idProjeto)
         VALUES (%s, %s, %s, %s, %s, %s)
-        SET @last_tarefa_id = LAST_INSERT_ID();
         """
     cursor.execute(query, (nome, data_criacao, descricao, prazo, status, idProjeto))
-
+    cursor.execute("SET @last_tarefa_id = LAST_INSERT_ID()")
+    #idTarefa = cursor.lastrowid()
     for idUsuario in idUsuarios:
             query = """
-            INSERT INTO Tarefa_Usuario (idUsuario, idTarefa)
+            INSERT INTO Usuario_Tarefa (idUsuario, idTarefa)
             VALUES (%s, @last_tarefa_id)
             """
             cursor.execute(query, (idUsuario,))
     db.commit()
     cursor.close()
 
+#TODO
 def update_tarefa(idTarefa, nome, data_criacao, descricao, prazo, status, idProjeto):
     db = get_db()
     cursor = db.cursor()
