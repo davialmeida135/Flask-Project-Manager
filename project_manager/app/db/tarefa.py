@@ -39,15 +39,24 @@ def create_tarefa(nome, data_criacao, descricao, prazo, status, idProjeto, idUsu
     cursor.close()
 
 #TODO
-def update_tarefa(idTarefa, nome, data_criacao, descricao, prazo, status, idProjeto):
+def update_tarefa(idTarefa,nome, data_criacao, descricao, prazo, status, idProjeto, idUsuarios : list):
     db = get_db()
     cursor = db.cursor()
+    cursor.execute("START TRANSACTION")
     query = """
     UPDATE Tarefa
     SET nome = %s, data_criacao = %s, descricao = %s, prazo = %s, status = %s, idProjeto = %s
     WHERE idTarefa = %s
     """
     cursor.execute(query, (nome, data_criacao, descricao, prazo, status, idProjeto, idTarefa))
+    query = "DELETE FROM Usuario_Tarefa WHERE idTarefa = %s"
+    cursor.execute(query, (idTarefa,))
+    for idUsuario in idUsuarios:
+        query = """
+        INSERT INTO Usuario_Tarefa (idUsuario, idTarefa)
+        VALUES (%s, %s)
+        """
+        cursor.execute(query, (idUsuario, idTarefa))
     db.commit()
     cursor.close()
 

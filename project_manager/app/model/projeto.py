@@ -1,11 +1,12 @@
 class ProjetoModel:
-    def __init__(self, idProjeto=None, idGerente=None, data_inicio=None, nome=None, descricao=None, data_fim=None):
+    def __init__(self, idProjeto=None, idGerente=None, data_inicio=None, nome=None, descricao=None, data_fim=None, idUsuarios=None):
         self.idProjeto = idProjeto
         self.idGerente = idGerente
         self.data_inicio = data_inicio
         self.nome = nome
         self.descricao = descricao
         self.data_fim = data_fim
+        self.idUsuarios = idUsuarios
 
     def to_dict(self):
         return {
@@ -15,4 +16,5 @@ class ProjetoModel:
             'nome': self.nome,
             'descricao': self.descricao,
             'data_fim': self.data_fim,
+            'idUsuarios': self.idUsuarios,
         }

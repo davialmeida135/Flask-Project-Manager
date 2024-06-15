@@ -18,6 +18,20 @@ def get_projeto_by_id(idProjeto):
     cursor.close()
     return projeto
 
+def get_projetos_usuario(idUsuario):
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    query = """
+    SELECT Projeto.*
+    FROM Projeto
+    JOIN Usuario_Projeto ON Projeto.idProjeto = Usuario_Projeto.idProjeto
+    WHERE Usuario_Projeto.idUsuario = %s
+    """
+    cursor.execute(query, (idUsuario,))
+    projetos = cursor.fetchall()
+    cursor.close()
+    return projetos
+
 def create_projeto(idGerente, data_inicio, nome, descricao, data_fim, usuarios: list):
     db = get_db()
     cursor = db.cursor()
@@ -37,20 +51,27 @@ def create_projeto(idGerente, data_inicio, nome, descricao, data_fim, usuarios: 
     
     db.commit()
     idProjeto = cursor.lastrowid
-    cursor.close()
-    
+    cursor.close()    
     return idProjeto
 
-#TODO
-def update_projeto(projeto):
+def update_projeto(idProjeto,idGerente, data_inicio, nome, descricao, data_fim, usuarios: list):
     db = get_db()
     cursor = db.cursor()
+    cursor.execute("START TRANSACTION")
     query = """
     UPDATE Projeto
     SET idGerente = %s, data_inicio = %s, nome = %s, descricao = %s, data_fim = %s
     WHERE idProjeto = %s
     """
-    cursor.execute(query, (projeto.idGerente, projeto.data_inicio, projeto.nome, projeto.descricao, projeto.data_fim, projeto.idProjeto))
+    cursor.execute(query, (idGerente, data_inicio, nome, descricao, data_fim,idProjeto,))
+    query = "DELETE FROM Usuario_Projeto WHERE idProjeto = %s"
+    cursor.execute(query, (idProjeto,))
+    for usuario in usuarios:
+        query = """
+        INSERT INTO Usuario_Projeto (idUsuario, idProjeto)
+        VALUES (%s, %s)
+        """
+        cursor.execute(query, (usuario, idProjeto))
     db.commit()
     cursor.close()
 

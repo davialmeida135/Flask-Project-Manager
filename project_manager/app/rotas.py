@@ -24,6 +24,8 @@ def get_room_types():
 def index():
     #projeto.create_projeto(1,datetime.datetime.now(),"projetaoaoaoao","descriptiotnt", datetime.datetime.now(),[1,2,3])
     #tarefa.create_tarefa("novatarefa", datetime.datetime.now(), "descrição legal", datetime.datetime.now(), "em andamento", 1, [1,2,3])
+    #tarefa.update_tarefa(1,"Editada", datetime.datetime.now(), "descrição muito massa", datetime.datetime.now(), "em andamento", 1, [1,3])
+    
     return render_template("create_tarefa.html")
 
 @main.post("/create")

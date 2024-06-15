@@ -1,5 +1,5 @@
 class TarefaModel:
-    def __init__(self, idTarefa=None, nome=None, data_criacao=None, descricao=None, prazo=None, status=None, idProjeto=None):
+    def __init__(self, idTarefa=None, nome=None, data_criacao=None, descricao=None, prazo=None, status=None, idProjeto=None, idUsuarios=None,):
         self.idTarefa = idTarefa
         self.nome = nome
         self.data_criacao = data_criacao
@@ -7,6 +7,7 @@ class TarefaModel:
         self.prazo = prazo
         self.status = status
         self.idProjeto = idProjeto
+        self.idUsuarios = idUsuarios
 
     def to_dict(self):
         return {
@@ -17,4 +18,5 @@ class TarefaModel:
             'prazo': self.prazo,
             'status': self.status,
             'idProjeto': self.idProjeto,
+            'idUsuarios': self.idUsuarios,
         }

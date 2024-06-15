@@ -2,8 +2,6 @@ from flask import Flask
 from flask_login import LoginManager, login_user
 from .db import init_app
 
-
-
 login_manager = LoginManager()
 
 def create_app():
@@ -18,8 +16,6 @@ def create_app():
     app.register_blueprint(main)
     from .routes.tarefas import tarefa_bp
     app.register_blueprint(tarefa_bp, url_prefix='/tarefas')
-
-
 
 
     return app
