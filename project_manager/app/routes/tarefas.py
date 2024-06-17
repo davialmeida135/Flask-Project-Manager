@@ -25,7 +25,6 @@ class TarefaSchema(Schema):
 @tarefa_bp.route("/new",methods=['GET', 'POST'])
 def create_tarefa():
     if request.method == 'GET':
-        
         return render_template("create_tarefa.html")
     if request.method == 'POST':
         tarefa_schema = TarefaSchema()

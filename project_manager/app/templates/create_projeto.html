@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Projeto</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Criar Novo Projeto</h1>
+        <form method="POST" action="{{ url_for('projeto.create_projeto') }}">
+            <!-- Nome do Projeto -->
+            <div class="form-group">
+                <label for="nome">Nome do Projeto:</label>
+                <input type="text" class="form-control" id="nome" name="nome">
+            </div>
+
+            <!-- Descrição do Projeto -->
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+            </div>
+
+            <!-- Data de Início -->
+            <div class="form-group">
+                <label for="data_inicio">Data de Início:</label>
+                <input type="date" class="form-control" id="data_inicio" name="data_inicio">
+            </div>
+
+            <!-- Data de Fim -->
+            <div class="form-group">
+                <label for="data_fim">Data de Término:</label>
+                <input type="date" class="form-control" id="data_fim" name="data_fim">
+            </div>
+
+            <!-- ID do Gerente -->
+            <div class="form-group">
+                <label for="idGerente">ID do Gerente:</label>
+                <input type="number" class="form-control" id="idGerente" name="idGerente">
+            </div>
+
+            <!-- Botão de Envio -->
+            <button type="submit" class="btn btn-primary">Criar Projeto</button>
+        </form>
+    </div>
+
+    <!-- Incluindo jQuery e Bootstrap JS (via CDN para facilitar) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

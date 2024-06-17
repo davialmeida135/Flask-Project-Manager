@@ -6,7 +6,7 @@ from app.db.projeto import (
     delete_projeto,
     get_projetos_usuario,
 )
-from model.projeto import ProjetoModel
+from app.model.projeto import ProjetoModel
 import datetime
 
 def get_projetos():
@@ -16,13 +16,14 @@ def get_projeto(idProjeto):
     return get_projeto_by_id(idProjeto)
 
 def add_projeto(projeto: ProjetoModel):
-    projeto.data_criacao = datetime.date.today()
+    print(f"Adicionando projeto: {projeto.to_dict()}")
+    projeto.data_inicio = datetime.date.today()
     create_projeto(projeto.idGerente,
-                    projeto.data_inicio, 
-                    projeto.nome,
-                    projeto.descricao,
-                    projeto.data_fim,
-                    projeto.idUsuarios)
+                   projeto.data_inicio,
+                   projeto.nome,
+                   projeto.descricao,
+                   projeto.data_fim,
+                   projeto.idUsuarios)
 
 def edit_projeto(projeto: ProjetoModel):
     if projeto.idProjeto is not None:

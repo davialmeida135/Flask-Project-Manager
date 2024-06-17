@@ -15,7 +15,9 @@ def create_app():
     from .rotas import main
     app.register_blueprint(main)
     from .routes.tarefas import tarefa_bp
+    from .routes.projetos import projeto_bp
     app.register_blueprint(tarefa_bp, url_prefix='/tarefas')
+    app.register_blueprint(projeto_bp, url_prefix='/projetos')
 
 
     return app

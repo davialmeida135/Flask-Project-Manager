@@ -1,0 +1,40 @@
+<!-- templates/lista_projetos.html -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Projetos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Lista de Projetos</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Data de Início</th>
+                    <th scope="col">Data de Fim</th>
+                    <th scope="col">ID do Gerente</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for projeto in projetos %}
+                <tr>
+                    <td>{{ projeto.idProjeto }}</td>
+                    <td>{{ projeto.nome }}</td>
+                    <td>{{ projeto.descricao }}</td>
+                    <td>{{ projeto.data_inicio }}</td>
+                    <td>{{ projeto.data_fim }}</td>
+                    <td>{{ projeto.idGerente }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
