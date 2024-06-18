@@ -12,7 +12,6 @@
             <h1 class="mb-0">Detalhes do Projeto</h1>
             <div class="d-flex">
                 <a href="{{ url_for('projeto.listar_projetos') }}" class="btn btn-secondary mr-2">Voltar à Lista</a>
-                <!-- Ocultando caso seja um projeto terminado -->
                 {% if not projeto.data_fim %}
                 <a href="{{ url_for('projeto.edit_projeto_view', id=projeto.idProjeto) }}" class="btn btn-primary mr-2">Editar Projeto</a>
                 <button type="button" class="btn btn-danger" id="terminarProjetoBtn" data-toggle="modal" data-target="#confirmTerminateModal">
@@ -40,7 +39,29 @@
                     <strong>Descrição:</strong> {{ tarefa.descricao }}<br>
                     <strong>Prazo:</strong> {{ tarefa.prazo }}<br>
                     <strong>Status:</strong> {{ tarefa.status }}
+                    <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#confirmDeleteTarefaModal{{ tarefa.idTarefa }}">Deletar</button>
                 </li>
+
+                <!-- Modal de confirmação de deletar tarefa -->
+                <div class="modal fade" id="confirmDeleteTarefaModal{{ tarefa.idTarefa }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteTarefaModalLabel{{ tarefa.idTarefa }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmDeleteTarefaModalLabel{{ tarefa.idTarefa }}">Confirmar Exclusão da Tarefa</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Tem certeza que deseja deletar a tarefa "{{ tarefa.nome }}"?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <a href="{{ url_for('tarefa.deletar_tarefa', idTarefa=tarefa.idTarefa, idProjeto=projeto.idProjeto) }}" class="btn btn-danger">Deletar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </ul>
         </div>

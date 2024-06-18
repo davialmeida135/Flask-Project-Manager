@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-from app.service.tarefa_service import add_tarefa
+from app.service.tarefa_service import add_tarefa, remove_tarefa
 from marshmallow import Schema, fields
 from app.model.tarefa import TarefaModel
 import datetime
@@ -23,20 +23,16 @@ def create_tarefa_view(idProjeto):
 @tarefa_bp.route('/create', methods=['POST'])
 def create_tarefa():
     try:
-        # Receber os dados do formulário
         nome = request.form.get('nome')
         descricao = request.form.get('descricao')
         prazo = request.form.get('prazo')
         idUsuarios = request.form.get('idUsuarios')
         idProjeto = request.form.get('idProjeto')
 
-        # Definir data de criação como a data atual
         data_criacao = datetime.date.today()
 
-        # Definir status padrão como 'Undone'
         status = 'Undone'
 
-        # Criar a tarefa usando o serviço
         tarefa = TarefaModel(nome=nome, data_criacao=data_criacao, descricao=descricao, prazo=prazo, status=status, idProjeto=idProjeto, idUsuarios=idUsuarios)
         add_tarefa(tarefa)
 
@@ -44,3 +40,11 @@ def create_tarefa():
     
     except Exception as e:
         return redirect(url_for('tarefa.create_tarefa_view', idProjeto=idProjeto))
+    
+@tarefa_bp.route('/delete/<int:idTarefa>/<int:idProjeto>', methods=['GET'])
+def deletar_tarefa(idTarefa, idProjeto):
+    try:
+        remove_tarefa(idTarefa)
+    except Exception as e:
+        print(str(e))
+    return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))

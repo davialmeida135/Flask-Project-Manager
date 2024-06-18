@@ -7,6 +7,7 @@ from app.db.tarefa import (
     get_usuario_tarefas,
     get_user_projeto_tarefas,
     get_projeto_tarefas,
+    delete_tarefa_usuarios,
 )
 from app.model.tarefa import TarefaModel
 import datetime
@@ -37,6 +38,7 @@ def edit_tarefa(tarefa: TarefaModel):
         raise ValueError("<EditTarefa> Tarefa não encontrada")
 
 def remove_tarefa(idTarefa):
+    delete_tarefa_usuarios(idTarefa)
     delete_tarefa(idTarefa)
 
 def get_tarefas():
