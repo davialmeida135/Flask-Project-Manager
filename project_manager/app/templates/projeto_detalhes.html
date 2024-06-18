@@ -44,6 +44,11 @@
                 {% endfor %}
             </ul>
         </div>
+
+        <!-- Botão para criar nova tarefa -->
+        <div class="mt-3">
+            <a href="{{ url_for('tarefa.create_tarefa_view', idProjeto=projeto.idProjeto) }}" class="btn btn-success">Criar Nova Tarefa</a>
+        </div>
     </div>
     
     <!-- Modal de confirmação de término de projeto -->
