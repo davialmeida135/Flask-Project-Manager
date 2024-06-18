@@ -11,26 +11,27 @@
 <body>
     <div class="container mt-5">
         <h1>Lista de Projetos</h1>
+        <a href="{{ url_for('projeto.create_projeto') }}" class="btn btn-primary mb-3">Criar Novo Projeto</a>
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Nome</th>
                     <th scope="col">Descrição</th>
                     <th scope="col">Data de Início</th>
                     <th scope="col">Data de Fim</th>
-                    <th scope="col">ID do Gerente</th>
+                    <th scope="col">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for projeto in projetos %}
                 <tr>
-                    <td>{{ projeto.idProjeto }}</td>
                     <td>{{ projeto.nome }}</td>
                     <td>{{ projeto.descricao }}</td>
                     <td>{{ projeto.data_inicio }}</td>
                     <td>{{ projeto.data_fim }}</td>
-                    <td>{{ projeto.idGerente }}</td>
+                    <td>
+                        <a href="{{ url_for('projeto.projeto_detalhes', id=projeto.idProjeto) }}" class="btn btn-info">Ver Detalhes</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

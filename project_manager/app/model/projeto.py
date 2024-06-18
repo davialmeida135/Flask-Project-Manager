@@ -6,8 +6,7 @@ class ProjetoModel:
         self.nome = nome
         self.descricao = descricao
         self.data_fim = data_fim
-        self.idUsuarios = idUsuarios
-        self.data_criacao = None  # Adicione este atributo
+        self.idUsuarios = idUsuarios if idUsuarios is not None else []
 
     def to_dict(self):
         return {
@@ -18,5 +17,4 @@ class ProjetoModel:
             'descricao': self.descricao,
             'data_fim': self.data_fim,
             'idUsuarios': self.idUsuarios,
-            'data_criacao': self.data_criacao  # Adicione este atributo
         }

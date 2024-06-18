@@ -1,0 +1,26 @@
+<!-- templates/projeto_detalhes.html -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Projeto</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Detalhes do Projeto</h1>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>ID:</strong> {{ projeto.idProjeto }}</li>
+            <li class="list-group-item"><strong>Nome:</strong> {{ projeto.nome }}</li>
+            <li class="list-group-item"><strong>Descrição:</strong> {{ projeto.descricao }}</li>
+            <li class="list-group-item"><strong>Data de Início:</strong> {{ projeto.data_inicio }}</li>
+            <li class="list-group-item"><strong>Data de Fim:</strong> {{ projeto.data_fim }}</li>
+            <li class="list-group-item"><strong>ID do Gerente:</strong> {{ projeto.idGerente }}</li>
+        </ul>
+        <a href="{{ url_for('projeto.listar_projetos') }}" class="btn btn-secondary mt-3">Voltar à Lista</a>
+        <a href="{{ url_for('projeto.edit_projeto_view', id=projeto.idProjeto) }}" class="btn btn-primary mt-3">Editar Projeto</a>  <!-- Atualize aqui -->
+    </div>
+</body>
+</html>
