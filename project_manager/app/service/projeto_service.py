@@ -10,7 +10,17 @@ from app.model.projeto import ProjetoModel
 import datetime
 
 def get_projetos():
-    return get_all_projetos()
+    projetos_data = get_all_projetos()
+    projetos = [ProjetoModel(
+        idProjeto=projeto['idProjeto'],
+        idGerente=projeto['idGerente'],
+        data_inicio=projeto['data_inicio'],
+        nome=projeto['nome'],
+        descricao=projeto['descricao'],
+        data_fim=projeto['data_fim'],
+        idUsuarios=projeto.get('idUsuarios', [])
+    ) for projeto in projetos_data]
+    return projetos
 
 def get_projeto(idProjeto):
     projeto_data = get_projeto_by_id(idProjeto)
@@ -53,3 +63,18 @@ def remove_projeto(idProjeto):
 
 def get_projetos_usuario(idUsuario):
     return get_projetos_usuario(idUsuario)
+
+def terminar_projeto(idProjeto):
+    projeto = get_projeto(idProjeto)
+    projeto.data_fim = datetime.date.today()
+    edit_projeto(projeto)
+
+def get_projetos_ativos():
+    projetos = get_projetos()
+    projetos = [projeto for projeto in projetos if projeto.data_fim is None]
+    return projetos
+
+def get_projetos_terminados():
+    projetos = get_projetos()
+    projetos_terminados = [projeto for projeto in projetos if projeto.data_fim is not None]
+    return projetos_terminados

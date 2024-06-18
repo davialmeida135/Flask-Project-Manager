@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from marshmallow import Schema, fields
-from app.service.projeto_service import get_projetos, add_projeto, get_projeto, edit_projeto as update_projeto, remove_projeto
+from app.service.projeto_service import get_projetos_ativos, add_projeto, get_projeto, edit_projeto as update_projeto, terminar_projeto, get_projetos_terminados
 from app.model.projeto import ProjetoModel
 
 projeto_bp = Blueprint('projeto', __name__)
@@ -8,31 +8,30 @@ projeto_bp = Blueprint('projeto', __name__)
 class ProjetoSchema(Schema):
     nome = fields.Str(required=True)
     descricao = fields.Str(required=False)
-    data_inicio = fields.Date(required=False)
-    data_fim = fields.Date(required=False)
     idGerente = fields.Int(required=True)
 
 @projeto_bp.route("/new", methods=['GET', 'POST'])
 def create_projeto():
     if request.method == 'GET':
         return render_template("create_projeto.html")
+    
     if request.method == 'POST':
         projeto_schema = ProjetoSchema()
         projeto_data = projeto_schema.load(request.form)
+        
         projeto = ProjetoModel(
             nome=projeto_data['nome'],
             descricao=projeto_data.get('descricao'),
-            data_inicio=projeto_data.get('data_inicio'),
-            data_fim=projeto_data.get('data_fim'),
             idGerente=projeto_data['idGerente'],
             idUsuarios=[]
         )
+        
         add_projeto(projeto)
         return redirect(url_for('projeto.listar_projetos'))
 
 @projeto_bp.route("/list", methods=['GET'])
 def listar_projetos():
-    projetos = get_projetos()
+    projetos = get_projetos_ativos()
     return render_template("lista_projetos.html", projetos=projetos)
 
 @projeto_bp.route("/details/<int:id>", methods=['GET'])
@@ -55,7 +54,6 @@ def edit_projeto_view(id):
             projeto.nome = projeto_data['nome']
             projeto.descricao = projeto_data.get('descricao')
             projeto.data_inicio = projeto_data.get('data_inicio')
-            projeto.data_fim = projeto_data.get('data_fim')
             projeto.idGerente = projeto_data['idGerente']
             update_projeto(projeto)
             return redirect(url_for('projeto.projeto_detalhes', id=projeto.idProjeto))
@@ -65,7 +63,12 @@ def edit_projeto_view(id):
     
     return render_template("edit_projeto.html", projeto=projeto)
 
-@projeto_bp.route("/delete/<int:id>", methods=['GET'])
-def remover_projeto(id):
-    remove_projeto(id)
+@projeto_bp.route("/terminate/<int:id>", methods=['GET'])
+def terminar_projeto_view(id):
+    terminar_projeto(id)
     return redirect(url_for('projeto.listar_projetos'))
+
+@projeto_bp.route("/list/terminados", methods=['GET'])
+def listar_projetos_terminados():
+    projetos_terminados = get_projetos_terminados()
+    return render_template("lista_projetos_terminados.html", projetos=projetos_terminados)

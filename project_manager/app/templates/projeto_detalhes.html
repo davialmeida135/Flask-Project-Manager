@@ -20,29 +20,29 @@
         <div class="mt-3">
             <a href="{{ url_for('projeto.listar_projetos') }}" class="btn btn-secondary">Voltar à Lista</a>
             <a href="{{ url_for('projeto.edit_projeto_view', id=projeto.idProjeto) }}" class="btn btn-primary">Editar Projeto</a>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
-                Excluir Projeto
+            <button type="button" class="btn btn-danger" id="terminarProjetoBtn" data-toggle="modal" data-target="#confirmTerminateModal">
+                Terminar Projeto
             </button>
         </div>
     </div>
     
-    <!-- Modal de confirmação de exclusão -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <!-- Modal de confirmação de término de projeto -->
+    <div class="modal fade" id="confirmTerminateModal" tabindex="-1" role="dialog" aria-labelledby="confirmTerminateModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                    <h5 class="modal-title" id="confirmTerminateModalLabel">Confirmar Término do Projeto</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Tem certeza que deseja excluir o projeto "{{ projeto.nome }}"?</p>
+                    <p>Tem certeza que deseja terminar o projeto "{{ projeto.nome }}"?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <!-- Link para a rota de exclusão -->
-                    <a href="{{ url_for('projeto.remover_projeto', id=projeto.idProjeto) }}" class="btn btn-danger">Excluir</a>
+                    <!-- Botão para terminar o projeto -->
+                    <a href="{{ url_for('projeto.terminar_projeto_view', id=projeto.idProjeto) }}" class="btn btn-danger">Terminar</a>
                 </div>
             </div>
         </div>
