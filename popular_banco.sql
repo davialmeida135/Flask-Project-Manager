@@ -4,7 +4,7 @@ INSERT INTO Usuario (nome,username) VALUES ('Alice Johnson','alice1999');
 INSERT INTO Usuario (nome,username) VALUES ('Bob Brown','bobao');
 INSERT INTO Usuario (nome,username) VALUES ('Charlie Davis','charlies1990');
 
-INSERT INTO Projeto (idGerente, data_inicio, nome, descricao, data_fim) 
+INSERT INTO Projeto (idGerente, data_inicio, nome, descricao, data_fim)
 VALUES (1, '2023-01-01', 'Project Alpha', 'Description for Project Alpha', '2023-12-31');
 
 INSERT INTO Projeto (idGerente, data_inicio, nome, descricao, data_fim) 
