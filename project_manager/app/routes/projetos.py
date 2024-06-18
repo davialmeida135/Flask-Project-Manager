@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from marshmallow import Schema, fields
-from app.service.projeto_service import get_projetos, add_projeto, get_projeto, edit_projeto as update_projeto
+from app.service.projeto_service import get_projetos, add_projeto, get_projeto, edit_projeto as update_projeto, remove_projeto
 from app.model.projeto import ProjetoModel
 
 projeto_bp = Blueprint('projeto', __name__)
@@ -64,3 +64,8 @@ def edit_projeto_view(id):
             return render_template("edit_projeto.html", projeto=projeto, error=str(e))
     
     return render_template("edit_projeto.html", projeto=projeto)
+
+@projeto_bp.route("/delete/<int:id>", methods=['GET'])
+def remover_projeto(id):
+    remove_projeto(id)
+    return redirect(url_for('projeto.listar_projetos'))
