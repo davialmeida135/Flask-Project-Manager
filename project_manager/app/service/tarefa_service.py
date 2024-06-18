@@ -8,8 +8,11 @@ from app.db.tarefa import (
     get_user_projeto_tarefas,
     get_projeto_tarefas,
 )
-from model.tarefa import TarefaModel
+from app.model.tarefa import TarefaModel
 import datetime
+
+def get_tarefas_projeto(idProjeto):
+    return get_projeto_tarefas(idProjeto)
 
 def get_tarefas():
     return get_all_tarefas()
