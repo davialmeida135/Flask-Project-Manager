@@ -45,7 +45,19 @@ def get_tarefas():
     return get_all_tarefas()
 
 def get_tarefa(idTarefa):
-    return get_tarefa_by_id(idTarefa)
+    tarefa_data = get_tarefa_by_id(idTarefa)
+    if tarefa_data:
+        return TarefaModel(
+            idTarefa=tarefa_data['idTarefa'],
+            nome=tarefa_data['nome'],
+            data_criacao=tarefa_data['data_criacao'],
+            descricao=tarefa_data['descricao'],
+            prazo=tarefa_data['prazo'],
+            status=tarefa_data['status'],
+            idProjeto=tarefa_data['idProjeto'],
+            idUsuarios=tarefa_data.get('idUsuarios')
+        )
+    return None
 
 def get_tarefas_usuario(idUsuario):
     return get_usuario_tarefas(idUsuario)

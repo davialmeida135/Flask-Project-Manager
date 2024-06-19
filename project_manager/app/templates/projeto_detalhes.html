@@ -35,7 +35,7 @@
             <ul class="list-group">
                 {% for tarefa in tarefas %}
                 <li class="list-group-item">
-                    <strong>Nome:</strong> {{ tarefa.nome }}<br>
+                    <strong>Nome:</strong> <a href="{{ url_for('tarefa.tarefa_detalhes', idTarefa=tarefa.idTarefa) }}">{{ tarefa.nome }}</a><br>
                     <strong>Descrição:</strong> {{ tarefa.descricao }}<br>
                     <strong>Prazo:</strong> {{ tarefa.prazo }}<br>
                     <strong>Status:</strong> {{ tarefa.status }}

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-from app.service.tarefa_service import add_tarefa, remove_tarefa
+from app.service.tarefa_service import add_tarefa, remove_tarefa, get_tarefa, edit_tarefa
 from marshmallow import Schema, fields
 from app.model.tarefa import TarefaModel
 import datetime
@@ -48,3 +48,37 @@ def deletar_tarefa(idTarefa, idProjeto):
     except Exception as e:
         print(str(e))
     return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))
+
+@tarefa_bp.route('/details/<int:idTarefa>', methods=['GET'])
+def tarefa_detalhes(idTarefa):
+    tarefa = get_tarefa(idTarefa)
+    if not tarefa:
+        abort(404)
+    return render_template('detalhes_tarefa.html', tarefa=tarefa)
+
+@tarefa_bp.route('/edit/<int:idTarefa>', methods=['GET', 'POST'])
+def edit_tarefa_view(idTarefa):
+    tarefa = get_tarefa(idTarefa)
+    if not tarefa:
+        abort(404)
+    
+    if request.method == 'POST':
+        try:
+            nome = request.form.get('nome')
+            descricao = request.form.get('descricao')
+            prazo = request.form.get('prazo')
+            idUsuarios = request.form.get('idUsuarios')
+            status = request.form.get('status')
+
+            tarefa.nome = nome
+            tarefa.descricao = descricao
+            tarefa.prazo = prazo
+            tarefa.idUsuarios = idUsuarios
+            tarefa.status = status
+
+            edit_tarefa(tarefa)
+            return redirect(url_for('tarefa.tarefa_detalhes', idTarefa=idTarefa))
+        except Exception as e:
+            print(str(e))
+    
+    return render_template('edit_tarefa.html', tarefa=tarefa)
