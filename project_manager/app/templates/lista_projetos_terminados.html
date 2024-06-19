@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Projetos Terminados</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Lista de Projetos Terminados</h1>
+        <a href="{{ url_for('projeto.listar_projetos') }}" class="btn btn-primary mb-3">Voltar para Lista de Projetos</a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Data de Início</th>
+                    <th scope="col">Data de Fim</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for projeto in projetos %}
+                <tr>
+                    <td>{{ projeto.nome }}</td>
+                    <td>{{ projeto.descricao }}</td>
+                    <td>{{ projeto.data_inicio }}</td>
+                    <td>{{ projeto.data_fim }}</td>
+                    <td>
+                        <a href="{{ url_for('projeto.projeto_detalhes', id=projeto.idProjeto) }}" class="btn btn-info">Ver Detalhes</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Incluindo jQuery e Bootstrap JS (via CDN para facilitar) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

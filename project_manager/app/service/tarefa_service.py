@@ -1,21 +1,16 @@
 from app.db.tarefa import (
-    get_all_tarefas,
-    get_tarefa_by_id,
     create_tarefa,
     update_tarefa,
     delete_tarefa,
+    get_all_tarefas,
+    get_tarefa_by_id,
     get_usuario_tarefas,
     get_user_projeto_tarefas,
     get_projeto_tarefas,
+    delete_tarefa_usuarios,
 )
-from model.tarefa import TarefaModel
+from app.model.tarefa import TarefaModel
 import datetime
-
-def get_tarefas():
-    return get_all_tarefas()
-
-def get_tarefa(idTarefa):
-    return get_tarefa_by_id(idTarefa)
 
 def add_tarefa(tarefa: TarefaModel):
     tarefa.data_criacao = datetime.date.today()
@@ -31,19 +26,38 @@ def add_tarefa(tarefa: TarefaModel):
 def edit_tarefa(tarefa: TarefaModel):
     if tarefa.idTarefa is not None:
         update_tarefa(tarefa.idTarefa,
-                       tarefa.nome,
-                        tarefa.data_criacao,
-                        tarefa.descricao,
-                        tarefa.prazo,
-                        tarefa.status,
-                        tarefa.idProjeto,
-                        tarefa.idUsuarios
-                        )
+                      tarefa.nome,
+                      tarefa.data_criacao,
+                      tarefa.descricao,
+                      tarefa.prazo,
+                      tarefa.status,
+                      tarefa.idProjeto,
+                      tarefa.idUsuarios
+                      )
     else:
         raise ValueError("<EditTarefa> Tarefa não encontrada")
 
 def remove_tarefa(idTarefa):
+    delete_tarefa_usuarios(idTarefa)
     delete_tarefa(idTarefa)
+
+def get_tarefas():
+    return get_all_tarefas()
+
+def get_tarefa(idTarefa):
+    tarefa_data = get_tarefa_by_id(idTarefa)
+    if tarefa_data:
+        return TarefaModel(
+            idTarefa=tarefa_data['idTarefa'],
+            nome=tarefa_data['nome'],
+            data_criacao=tarefa_data['data_criacao'],
+            descricao=tarefa_data['descricao'],
+            prazo=tarefa_data['prazo'],
+            status=tarefa_data['status'],
+            idProjeto=tarefa_data['idProjeto'],
+            idUsuarios=tarefa_data.get('idUsuarios')
+        )
+    return None
 
 def get_tarefas_usuario(idUsuario):
     return get_usuario_tarefas(idUsuario)

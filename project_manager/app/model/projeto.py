@@ -6,7 +6,7 @@ class ProjetoModel:
         self.nome = nome
         self.descricao = descricao
         self.data_fim = data_fim
-        self.idUsuarios = idUsuarios
+        self.idUsuarios = idUsuarios if idUsuarios is not None else []
 
     def to_dict(self):
         return {

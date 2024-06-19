@@ -7,7 +7,7 @@ class TarefaModel:
         self.prazo = prazo
         self.status = status
         self.idProjeto = idProjeto
-        self.idUsuarios = idUsuarios
+        self.idUsuarios = idUsuarios if idUsuarios is not None else []
 
     def to_dict(self):
         return {

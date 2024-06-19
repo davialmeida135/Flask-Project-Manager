@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Projeto</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="mb-0">Detalhes do Projeto</h1>
+            <div class="d-flex">
+                <a href="{{ url_for('projeto.listar_projetos') }}" class="btn btn-secondary mr-2">Voltar à Lista</a>
+                {% if not projeto.data_fim %}
+                <a href="{{ url_for('projeto.edit_projeto_view', id=projeto.idProjeto) }}" class="btn btn-primary mr-2">Editar Projeto</a>
+                <button type="button" class="btn btn-danger" id="terminarProjetoBtn" data-toggle="modal" data-target="#confirmTerminateModal">
+                    Terminar Projeto
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <ul class="list-group">
+            <li class="list-group-item"><strong>ID:</strong> {{ projeto.idProjeto }}</li>
+            <li class="list-group-item"><strong>Nome:</strong> {{ projeto.nome }}</li>
+            <li class="list-group-item"><strong>Descrição:</strong> {{ projeto.descricao }}</li>
+            <li class="list-group-item"><strong>Data de Início:</strong> {{ projeto.data_inicio }}</li>
+            <li class="list-group-item"><strong>Data de Fim:</strong> {{ projeto.data_fim }}</li>
+            <li class="list-group-item"><strong>ID do Gerente:</strong> {{ projeto.idGerente }}</li>
+        </ul>
+
+        <div class="mt-5">
+            <h2>Tarefas do Projeto</h2>
+            <ul class="list-group">
+                {% for tarefa in tarefas %}
+                <li class="list-group-item">
+                    <strong>Nome:</strong> <a href="{{ url_for('tarefa.tarefa_detalhes', idTarefa=tarefa.idTarefa) }}">{{ tarefa.nome }}</a><br>
+                    <strong>Descrição:</strong> {{ tarefa.descricao }}<br>
+                    <strong>Prazo:</strong> {{ tarefa.prazo }}<br>
+                    <strong>Status:</strong> {{ tarefa.status }}
+                    <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#confirmDeleteTarefaModal{{ tarefa.idTarefa }}">Deletar</button>
+                </li>
+
+                <!-- Modal de confirmação de deletar tarefa -->
+                <div class="modal fade" id="confirmDeleteTarefaModal{{ tarefa.idTarefa }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteTarefaModalLabel{{ tarefa.idTarefa }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmDeleteTarefaModalLabel{{ tarefa.idTarefa }}">Confirmar Exclusão da Tarefa</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Tem certeza que deseja deletar a tarefa "{{ tarefa.nome }}"?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <a href="{{ url_for('tarefa.deletar_tarefa', idTarefa=tarefa.idTarefa, idProjeto=projeto.idProjeto) }}" class="btn btn-danger">Deletar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Botão para criar nova tarefa -->
+        <div class="mt-3">
+            <a href="{{ url_for('tarefa.create_tarefa_view', idProjeto=projeto.idProjeto) }}" class="btn btn-success">Criar Nova Tarefa</a>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmação de término de projeto -->
+    <div class="modal fade" id="confirmTerminateModal" tabindex="-1" role="dialog" aria-labelledby="confirmTerminateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmTerminateModalLabel">Confirmar Término do Projeto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja terminar o projeto "{{ projeto.nome }}"?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a href="{{ url_for('projeto.terminar_projeto_view', id=projeto.idProjeto) }}" class="btn btn-danger">Terminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

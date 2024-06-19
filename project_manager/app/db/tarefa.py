@@ -100,3 +100,11 @@ def get_projeto_tarefas(idProjeto):
     tarefas = cursor.fetchall()
     cursor.close()
     return tarefas
+
+def delete_tarefa_usuarios(idTarefa):
+    db = get_db()
+    cursor = db.cursor()
+    query = "DELETE FROM Usuario_Tarefa WHERE idTarefa = %s"
+    cursor.execute(query, (idTarefa,))
+    db.commit()
+    cursor.close()
