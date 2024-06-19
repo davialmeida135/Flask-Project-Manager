@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, url_for
+from flask_login import login_required, current_user
 from marshmallow import Schema, fields
 from app.service.projeto_service import get_projetos_ativos, add_projeto, get_projeto, edit_projeto as update_projeto, terminar_projeto, get_projetos_terminados
 from app.service.tarefa_service import get_tarefas_projeto
@@ -10,9 +11,9 @@ projeto_bp = Blueprint('projeto', __name__)
 class ProjetoSchema(Schema):
     nome = fields.Str(required=True)
     descricao = fields.Str(required=False)
-    idGerente = fields.Int(required=True)
 
 @projeto_bp.route("/new", methods=['GET', 'POST'])
+@login_required
 def create_projeto():
     if request.method == 'GET':
         return render_template("create_projeto.html")
@@ -24,16 +25,17 @@ def create_projeto():
         projeto = ProjetoModel(
             nome=projeto_data['nome'],
             descricao=projeto_data.get('descricao'),
-            idGerente=projeto_data['idGerente'],
-            idUsuarios=[]
+            idGerente=current_user.id,
+            idUsuarios=[current_user.id]
         )
         
         add_projeto(projeto)
         return redirect(url_for('projeto.listar_projetos'))
 
 @projeto_bp.route("/list", methods=['GET'])
+@login_required
 def listar_projetos():
-    projetos = get_projetos_ativos()
+    projetos = get_projetos_ativos(current_user.id)
     return render_template("lista_projetos.html", projetos=projetos)
 
 @projeto_bp.route("/details/<int:id>", methods=['GET'])
@@ -72,6 +74,7 @@ def terminar_projeto_view(id):
     return redirect(url_for('projeto.listar_projetos'))
 
 @projeto_bp.route("/list/terminados", methods=['GET'])
+@login_required
 def listar_projetos_terminados():
-    projetos_terminados = get_projetos_terminados()
+    projetos_terminados = get_projetos_terminados(current_user.id)
     return render_template("lista_projetos_terminados.html", projetos=projetos_terminados)
