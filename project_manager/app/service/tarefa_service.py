@@ -40,10 +40,10 @@ def remove_tarefa(idTarefa):
     delete_tarefa_usuarios(idTarefa)
     delete_tarefa(idTarefa)
 
-def get_tarefas():
+def fetch_tarefas():
     return get_all_tarefas()
 
-def get_tarefa(idTarefa):
+def fetch_tarefa(idTarefa):
     tarefa_data = get_tarefa_by_id(idTarefa)
     if tarefa_data:
         return TarefaModel(
@@ -58,11 +58,11 @@ def get_tarefa(idTarefa):
         )
     return None
 
-def get_tarefas_usuario(idUsuario):
+def fetch_tarefas_usuario(idUsuario):
     return get_usuario_tarefas(idUsuario)
 
-def get_tarefas_usuario_projeto(idUsuario, idProjeto):
+def fetch_tarefas_usuario_projeto(idUsuario, idProjeto):
     return get_user_projeto_tarefas(idUsuario, idProjeto)
 
-def get_tarefas_projeto(idProjeto):
+def fetch_tarefas_projeto(idProjeto):
     return get_projeto_tarefas(idProjeto)

@@ -2,9 +2,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import app.db.usuario as db_usuario
 from app.model.usuario import UsuarioModel
 
-
-
-
 def register_usuario(usuario):
     
     if len(usuario['username'])<4:
@@ -47,7 +44,6 @@ def get_usuario_by_id(idUsuario):
     if temp:
         return UsuarioModel(temp["idUsuario"], temp["nome"], temp["username"])
     else:
-        raise ValueError("User not found")
 
 def get_usuarios_projeto(id):
     usuarios_data = db_usuario.get_usuarios_by_projeto(id)

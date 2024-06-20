@@ -18,7 +18,7 @@ def get_comentario_by_id(idComentario):
     cursor.close()
     return comentario
 
-def get_comentarios_by_idTarefa(idTarefa):
+def get_comentarios_by_tarefa(idTarefa):
     db = get_db()
     cursor = db.cursor(dictionary=True)
     query = "SELECT * FROM Comentario WHERE idTarefa = %s AND idDestinatario IS NULL"
@@ -74,10 +74,10 @@ def create_feedback(mensagem, idUsuario, idTarefa, idDestinatario):
     cursor.close()
     return idComentario
 
-def get_feedbacks_by_destinatario(idDestinatario):
+def get_feedbacks_by_destinatario_tarefa(idDestinatario, idTarefa):
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    query = "SELECT * FROM Comentario WHERE idDestinatario = %s"
+    query = "SELECT * FROM Comentario WHERE idDestinatario = %s AND idTarefa = %s"
     cursor.execute(query, (idDestinatario,))
     comentarios = cursor.fetchall()
     cursor.close()

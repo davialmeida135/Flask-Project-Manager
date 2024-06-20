@@ -17,13 +17,13 @@
             <!-- Nome do Projeto -->
             <div class="form-group">
                 <label for="nome">Nome do Projeto:</label>
-                <input type="text" class="form-control" id="nome" name="nome">
+                <input type="text" class="form-control" id="nome" name="nome" value="{{ projeto.nome }}">
             </div>
 
             <!-- Descrição do Projeto -->
             <div class="form-group">
                 <label for="descricao">Descrição:</label>
-                <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ projeto.descricao }}</textarea>
             </div>
 
             <!-- Botão de Envio -->

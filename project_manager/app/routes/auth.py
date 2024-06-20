@@ -2,7 +2,7 @@ from marshmallow import Schema, fields
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.service.usuario_service import authenticate, register_usuario
-
+from app import login_manager
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -10,6 +10,7 @@ class UsuarioSchema(Schema):
     nome = fields.Str(required=False)
     username = fields.Str(required=False)
     password = fields.Str(required=False)
+    data_nascimento = fields.Str(required=False)
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])

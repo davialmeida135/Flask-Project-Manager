@@ -12,7 +12,7 @@ from app.service.usuario_service import get_usuario_by_id
 from app.model.projeto import ProjetoModel
 import datetime
 
-def get_projetos():
+def fetch_projetos():
     projetos_data = get_all_projetos()
     projetos = [ProjetoModel(
         idProjeto=projeto['idProjeto'],
@@ -25,7 +25,7 @@ def get_projetos():
     ) for projeto in projetos_data]
     return projetos
 
-def get_projeto(idProjeto):
+def fetch_projeto(idProjeto):
     projeto_data = get_projeto_by_id(idProjeto)
     if projeto_data:
         return ProjetoModel(
@@ -42,6 +42,7 @@ def get_projeto(idProjeto):
 def add_projeto(projeto: ProjetoModel):
     print(f"Adicionando projeto: {projeto.to_dict()}")  # Mensagem de depuração
     projeto.data_inicio = datetime.date.today()
+    projeto.idUsuarios.append(projeto.idGerente)
     create_projeto(projeto.idGerente,
                    projeto.data_inicio,
                    projeto.nome,
