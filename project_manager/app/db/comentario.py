@@ -32,7 +32,7 @@ def create_comentario(mensagem, idUsuario, idTarefa):
     cursor = db.cursor()
     query = """
     INSERT INTO Comentario (mensagem, idUsuario, idTarefa)
-    VALUES (%s, %s, %s, %s)
+    VALUES (%s, %s, %s)
     """
     cursor.execute(query, (mensagem, idUsuario, idTarefa))
     db.commit()
@@ -40,7 +40,7 @@ def create_comentario(mensagem, idUsuario, idTarefa):
     cursor.close()
     return idComentario
 
-def update_comentario(mensagem, idUsuario, idTarefa, idDestinatario):
+def update_comentario(idComentario, mensagem, idUsuario, idTarefa, idDestinatario=None):
     db = get_db()
     cursor = db.cursor()
     query = """
@@ -48,7 +48,7 @@ def update_comentario(mensagem, idUsuario, idTarefa, idDestinatario):
     SET mensagem = %s, idUsuario = %s, idTarefa = %s, idDestinatario = %s
     WHERE idComentario = %s
     """
-    cursor.execute(query, (mensagem, idUsuario, idTarefa, idDestinatario,))
+    cursor.execute(query, (mensagem, idUsuario, idTarefa, idDestinatario, idComentario))
     db.commit()
     cursor.close()
 
@@ -59,7 +59,6 @@ def delete_comentario(idComentario):
     cursor.execute(query, (idComentario,))
     db.commit()
     cursor.close()
-
 
 def create_feedback(mensagem, idUsuario, idTarefa, idDestinatario):
     db = get_db()
@@ -78,7 +77,7 @@ def get_feedbacks_by_destinatario_tarefa(idDestinatario, idTarefa):
     db = get_db()
     cursor = db.cursor(dictionary=True)
     query = "SELECT * FROM Comentario WHERE idDestinatario = %s AND idTarefa = %s"
-    cursor.execute(query, (idDestinatario,))
+    cursor.execute(query, (idDestinatario, idTarefa))
     comentarios = cursor.fetchall()
     cursor.close()
     return comentarios

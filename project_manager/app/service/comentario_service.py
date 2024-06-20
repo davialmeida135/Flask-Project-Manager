@@ -35,6 +35,5 @@ def remove_comentario(idComentario):
     delete_comentario(idComentario)
 
 def fetch_feedback_usuario_tarefa(idDestinatario, idTarefa):
-    
     return get_feedbacks_by_destinatario_tarefa(idDestinatario, idTarefa)
 

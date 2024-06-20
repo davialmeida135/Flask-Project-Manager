@@ -1,7 +1,10 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
+from flask_login import login_required, current_user
 from app.service.tarefa_service import add_tarefa, remove_tarefa, fetch_tarefa, edit_tarefa
+from app.service.comentario_service import fetch_comentario_by_tarefa, fetch_feedback_usuario_tarefa
 from marshmallow import Schema, fields
 from app.model.tarefa import TarefaModel
+from app.model.comentario import ComentarioModel
 import datetime
 
 tarefa_bp = Blueprint('tarefa', __name__)
@@ -42,11 +45,16 @@ def deletar_tarefa(idTarefa, idProjeto):
     return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))
 
 @tarefa_bp.route('/details/<int:idTarefa>', methods=['GET'])
+@login_required
 def tarefa_detalhes(idTarefa):
     tarefa = fetch_tarefa(idTarefa)
     if not tarefa:
         abort(404)
-    return render_template('detalhes_tarefa.html', tarefa=tarefa)
+    
+    comentarios = fetch_comentario_by_tarefa(idTarefa)
+    feedbacks = fetch_feedback_usuario_tarefa(current_user.id, idTarefa)
+     
+    return render_template('detalhes_tarefa.html', tarefa=tarefa, comentarios=comentarios, feedbacks=feedbacks, idTarefa=idTarefa)
 
 @tarefa_bp.route('/edit/<int:idTarefa>', methods=['GET', 'POST'])
 def edit_tarefa_view(idTarefa):

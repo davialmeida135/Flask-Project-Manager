@@ -19,8 +19,10 @@ def create_app():
     app.register_blueprint(main)
     from .routes.tarefas import tarefa_bp
     from .routes.projetos import projeto_bp
+    from .routes.comentarios import comentario_bp
     app.register_blueprint(tarefa_bp, url_prefix='/tarefas')
     app.register_blueprint(projeto_bp, url_prefix='/projetos')
+    app.register_blueprint(comentario_bp, url_prefix='/comentarios')
 
     from .routes.auth import auth_bp
     app.register_blueprint(auth_bp)

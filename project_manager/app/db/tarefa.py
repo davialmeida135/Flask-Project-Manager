@@ -108,29 +108,3 @@ def delete_tarefa_usuarios(idTarefa):
     cursor.execute(query, (idTarefa,))
     db.commit()
     cursor.close()
-
-def adicionar_usuario_projeto(idProjeto, idUsuario):
-    db = get_db()
-    cursor = db.cursor()
-    
-    query = """
-    INSERT INTO Usuario_Projeto (idUsuario, idProjeto)
-    VALUES (%s, %s)
-    """
-    cursor.execute(query, (idUsuario, idProjeto))
-    
-    db.commit()
-    cursor.close
-
-def remover_usuario_projeto(idProjeto, idUsuario):
-    db = get_db()
-    cursor = db.cursor()
-    
-    query = """
-    DELETE FROM Usuario_Projeto
-    WHERE idProjeto = %s AND idUsuario = %s
-    """
-    cursor.execute(query, (idProjeto, idUsuario))
-    
-    db.commit()
-    cursor.close()
