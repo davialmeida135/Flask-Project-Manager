@@ -10,6 +10,7 @@ class UsuarioSchema(Schema):
     nome = fields.Str(required=False)
     username = fields.Str(required=False)
     password = fields.Str(required=False)
+    data_nascimento = fields.Str(required=False)
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])

@@ -34,7 +34,7 @@ def modify_comentario(comentario : ComentarioModel):
 def remove_comentario(idComentario):
     delete_comentario(idComentario)
 
-def fetch_feedback_usuario_projeto(idDestinatario, idTarefa):
+def fetch_feedback_usuario_tarefa(idDestinatario, idTarefa):
     
     return get_feedbacks_by_destinatario_tarefa(idDestinatario, idTarefa)
 
