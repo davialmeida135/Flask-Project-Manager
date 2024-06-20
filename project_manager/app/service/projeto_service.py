@@ -39,6 +39,7 @@ def fetch_projeto(idProjeto):
 def add_projeto(projeto: ProjetoModel):
     print(f"Adicionando projeto: {projeto.to_dict()}")
     projeto.data_inicio = datetime.date.today()
+    projeto.idUsuarios.append(projeto.idGerente)
     create_projeto(projeto.idGerente,
                    projeto.data_inicio,
                    projeto.nome,
