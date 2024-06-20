@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
 from marshmallow import Schema, fields
 from app.service.projeto_service import get_projetos_ativos, add_projeto, get_projeto, edit_projeto as update_projeto, terminar_projeto, get_projetos_terminados, adicionar_usuario, remover_usuario
@@ -55,6 +55,9 @@ def edit_projeto_view(id):
     if projeto is None:
         return abort(404)
     
+    if current_user.id != projeto.idGerente:
+        return abort(403)
+    
     if request.method == 'POST':
         projeto_schema = ProjetoSchema()
         try:
@@ -71,8 +74,13 @@ def edit_projeto_view(id):
 
 @projeto_bp.route("/terminate/<int:id>", methods=['GET'])
 def terminar_projeto_view(id):
-    print(f'Caiu aqui com id = {id}')
-    usuarios = get_usuarios_projeto(id)
+    projeto = get_projeto(id)
+    if projeto is None:
+        return abort(404)
+    
+    if current_user.id != projeto.idGerente:
+        return abort(403)
+    
     terminar_projeto(id)
     return redirect(url_for('projeto.listar_projetos'))
 
@@ -85,6 +93,13 @@ def listar_projetos_terminados():
 @projeto_bp.route("/add-usuario-projeto/<int:idProjeto>", methods=['GET', 'POST'])
 @login_required
 def add_usuario_projeto_view(idProjeto):
+    projeto = get_projeto(idProjeto)
+    if projeto is None:
+        return abort(404)
+    
+    if current_user.id != projeto.idGerente:
+        return abort(403) 
+    
     if request.method == 'GET':
         return render_template("add_usuario_projeto.html", idProjeto=idProjeto)
     
@@ -105,6 +120,13 @@ def add_usuario_projeto_view(idProjeto):
 @projeto_bp.route("/remover-usuario-projeto/<int:idProjeto>", methods=['POST'])
 @login_required
 def remover_usuario_projeto(idProjeto):
+    projeto = get_projeto(idProjeto)
+    if projeto is None:
+        return abort(404)
+    
+    if current_user.id != projeto.idGerente:
+        return abort(403)
+
     idUsuario = int(request.form['idUsuario'])
     remover_usuario(idUsuario, idProjeto)
     return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))

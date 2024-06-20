@@ -13,10 +13,12 @@
             <div class="d-flex">
                 <a href="{{ url_for('projeto.listar_projetos') }}" class="btn btn-secondary mr-2">Voltar à Lista</a>
                 {% if not projeto.data_fim %}
-                <a href="{{ url_for('projeto.edit_projeto_view', id=projeto.idProjeto) }}" class="btn btn-primary mr-2">Editar Projeto</a>
-                <button type="button" class="btn btn-danger" id="terminarProjetoBtn" data-toggle="modal" data-target="#confirmTerminateModal">
-                    Terminar Projeto
-                </button>
+                    {% if projeto.idGerente == current_user.id %}
+                        <a href="{{ url_for('projeto.edit_projeto_view', id=projeto.idProjeto) }}" class="btn btn-primary mr-2">Editar Projeto</a>
+                        <button type="button" class="btn btn-danger" id="terminarProjetoBtn" data-toggle="modal" data-target="#confirmTerminateModal">
+                            Terminar Projeto
+                        </button>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -37,16 +39,20 @@
                 <li class="list-group-item">
                     <strong>Nome:</strong> {{ usuario.nome }}<br>
                     <strong>Username:</strong> {{ usuario.username }}
-                    <form method="POST" action="{{ url_for('projeto.remover_usuario_projeto', idProjeto=projeto.idProjeto) }}">
-                        <input type="hidden" name="idUsuario" value="{{ usuario.id }}">
-                        <button type="submit" class="btn btn-danger btn-sm float-right">Remover Usuário</button>
-                    </form>
+                    {% if projeto.idGerente == current_user.id %}
+                        <form method="POST" action="{{ url_for('projeto.remover_usuario_projeto', idProjeto=projeto.idProjeto) }}">
+                            <input type="hidden" name="idUsuario" value="{{ usuario.id }}">
+                            <button type="submit" class="btn btn-danger btn-sm float-right">Remover Usuário</button>
+                        </form>
+                    {% endif %}
                 </li>
                 {% endfor %}
             </ul>
             
             <div class="mt-3">
-                <a href="{{ url_for('projeto.add_usuario_projeto_view', idProjeto=projeto.idProjeto) }}" class="btn btn-success">Adicionar Usuário</a>
+                {% if projeto.idGerente == current_user.id %}
+                    <a href="{{ url_for('projeto.add_usuario_projeto_view', idProjeto=projeto.idProjeto) }}" class="btn btn-success">Adicionar Usuário</a>
+                {% endif %}
             </div>
         </div>
 
@@ -59,7 +65,9 @@
                     <strong>Descrição:</strong> {{ tarefa.descricao }}<br>
                     <strong>Prazo:</strong> {{ tarefa.prazo }}<br>
                     <strong>Status:</strong> {{ tarefa.status }}
-                    <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#confirmDeleteTarefaModal{{ tarefa.idTarefa }}">Deletar</button>
+                    {% if projeto.idGerente == current_user.id %}
+                        <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#confirmDeleteTarefaModal{{ tarefa.idTarefa }}">Deletar</button>
+                    {% endif %}
                 </li>
 
                 <!-- Modal de confirmação de deletar tarefa -->
@@ -88,7 +96,9 @@
 
         <!-- Botão para criar nova tarefa -->
         <div class="mt-3">
-            <a href="{{ url_for('tarefa.create_tarefa_view', idProjeto=projeto.idProjeto) }}" class="btn btn-success">Criar Nova Tarefa</a>
+            {% if projeto.idGerente == current_user.id %}
+                <a href="{{ url_for('tarefa.create_tarefa_view', idProjeto=projeto.idProjeto) }}" class="btn btn-success">Criar Nova Tarefa</a>
+            {% endif %}
         </div>
     </div>
     
