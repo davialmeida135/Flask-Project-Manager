@@ -10,7 +10,7 @@ class UsuarioModel(UserMixin):
 
     def to_dict(self):
         return {
-            'idUsuario': self.idUsuario,
+            'idUsuario': self.id,
             'nome': self.nome,
             'username': self.username,
             #'password': self.password

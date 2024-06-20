@@ -31,6 +31,18 @@
         </ul>
 
         <div class="mt-5">
+            <h2>Usuários do Projeto</h2>
+            <ul class="list-group">
+                {% for usuario in usuarios %}
+                <li class="list-group-item">
+                    <strong>Nome:</strong> {{ usuario.nome }}<br>
+                    <strong>Username:</strong> {{ usuario.username }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="mt-5">
             <h2>Tarefas do Projeto</h2>
             <ul class="list-group">
                 {% for tarefa in tarefas %}

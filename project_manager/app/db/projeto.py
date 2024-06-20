@@ -54,7 +54,7 @@ def create_projeto(idGerente, data_inicio, nome, descricao, data_fim, usuarios: 
     cursor.close()    
     return idProjeto
 
-def update_projeto(idProjeto,idGerente, data_inicio, nome, descricao, data_fim, usuarios: list):
+def update_projeto(idProjeto,idGerente, data_inicio, nome, descricao, data_fim):
     db = get_db()
     cursor = db.cursor()
     cursor.execute("START TRANSACTION")
@@ -64,16 +64,9 @@ def update_projeto(idProjeto,idGerente, data_inicio, nome, descricao, data_fim, 
     WHERE idProjeto = %s
     """
     cursor.execute(query, (idGerente, data_inicio, nome, descricao, data_fim,idProjeto,))
-    query = "DELETE FROM Usuario_Projeto WHERE idProjeto = %s"
-    cursor.execute(query, (idProjeto,))
-    for usuario in usuarios:
-        query = """
-        INSERT INTO Usuario_Projeto (idUsuario, idProjeto)
-        VALUES (%s, %s)
-        """
-        cursor.execute(query, (usuario, idProjeto))
     db.commit()
     cursor.close()
+    
 
 def delete_projeto(idProjeto):
     db = get_db()

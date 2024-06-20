@@ -53,8 +53,7 @@ def edit_projeto(projeto: ProjetoModel):
                           projeto.data_inicio,
                           projeto.nome,
                           projeto.descricao,
-                          projeto.data_fim,
-                          projeto.idUsuarios)
+                          projeto.data_fim)
     else:
         raise ValueError("<EditProjeto> Projeto não encontrado")
 
@@ -63,8 +62,11 @@ def remove_projeto(idProjeto):
 
 def terminar_projeto(idProjeto):
     projeto = get_projeto(idProjeto)
-    projeto.data_fim = datetime.date.today()
-    edit_projeto(projeto)
+    if projeto:
+        projeto.data_fim = datetime.date.today()
+        edit_projeto(projeto)
+    else:
+        print(f"Projeto com id {idProjeto} não encontrado")
 
 def get_projetos_ativos(idUsuario):
     projetos_data = fetch_projetos_usuario(idUsuario)
@@ -73,8 +75,8 @@ def get_projetos_ativos(idUsuario):
     return projetos_ativos
 
 def get_projetos_terminados(idUsuario):
-    print(idUsuario)
     projetos_data = fetch_projetos_usuario(idUsuario)
     projetos = [ProjetoModel(**projeto) for projeto in projetos_data]
     projetos_terminados = [projeto for projeto in projetos if projeto.data_fim is not None]
     return projetos_terminados
+    

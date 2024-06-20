@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from marshmallow import Schema, fields
 from app.service.projeto_service import get_projetos_ativos, add_projeto, get_projeto, edit_projeto as update_projeto, terminar_projeto, get_projetos_terminados
 from app.service.tarefa_service import get_tarefas_projeto
+from app.service.usuario_service import get_usuarios_projeto
 from app.model.projeto import ProjetoModel
 from app.model.tarefa import TarefaModel
 
@@ -44,7 +45,9 @@ def projeto_detalhes(id):
     if projeto is None:
         return abort(404)
     tarefas = get_tarefas_projeto(id)
-    return render_template('projeto_detalhes.html', projeto=projeto, tarefas=tarefas)
+    usuarios = get_usuarios_projeto(id)
+    return render_template('projeto_detalhes.html', projeto=projeto, tarefas=tarefas, usuarios=usuarios)
+
 
 @projeto_bp.route("/edit/<int:id>", methods=['GET', 'POST'])
 def edit_projeto_view(id):
@@ -58,8 +61,6 @@ def edit_projeto_view(id):
             projeto_data = projeto_schema.load(request.form)
             projeto.nome = projeto_data['nome']
             projeto.descricao = projeto_data.get('descricao')
-            projeto.data_inicio = projeto_data.get('data_inicio')
-            projeto.idGerente = projeto_data['idGerente']
             update_projeto(projeto)
             return redirect(url_for('projeto.projeto_detalhes', id=projeto.idProjeto))
         except Exception as e:
@@ -70,6 +71,8 @@ def edit_projeto_view(id):
 
 @projeto_bp.route("/terminate/<int:id>", methods=['GET'])
 def terminar_projeto_view(id):
+    print(f'Caiu aqui com id = {id}')
+    usuarios = get_usuarios_projeto(id)
     terminar_projeto(id)
     return redirect(url_for('projeto.listar_projetos'))
 
