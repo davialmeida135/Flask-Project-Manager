@@ -40,7 +40,7 @@ def login():
             if user:
                 login_user(user)
                 flash('Login successful!')
-                return redirect(url_for('home.home'))
+                return redirect(url_for('projeto.listar_projetos', user_id=user.id))
             else:
                 flash('Invalid username or password.')
                 return render_template('login.html')

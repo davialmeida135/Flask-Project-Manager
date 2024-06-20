@@ -32,7 +32,6 @@ def edit_tarefa(tarefa: TarefaModel):
                       tarefa.prazo,
                       tarefa.status,
                       tarefa.idProjeto,
-                      tarefa.idUsuarios
                       )
     else:
         raise ValueError("<EditTarefa> Tarefa não encontrada")

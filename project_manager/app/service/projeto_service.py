@@ -2,10 +2,13 @@ from app.db.projeto import (
     get_all_projetos,
     get_projeto_by_id,
     create_projeto,
-    update_projeto,
+    update_projeto as update_db_projeto,
     delete_projeto,
-    get_projetos_usuario,
+    get_projetos_usuario as fetch_projetos_usuario,
+    adicionar_usuario_projeto,
+    remover_usuario_projeto
 )
+from app.service.usuario_service import get_usuario_by_id
 from app.model.projeto import ProjetoModel
 import datetime
 
@@ -37,7 +40,7 @@ def fetch_projeto(idProjeto):
     return None
 
 def add_projeto(projeto: ProjetoModel):
-    print(f"Adicionando projeto: {projeto.to_dict()}")
+    print(f"Adicionando projeto: {projeto.to_dict()}")  # Mensagem de depuração
     projeto.data_inicio = datetime.date.today()
     projeto.idUsuarios.append(projeto.idGerente)
     create_projeto(projeto.idGerente,
@@ -49,33 +52,40 @@ def add_projeto(projeto: ProjetoModel):
 
 def edit_projeto(projeto: ProjetoModel):
     if projeto.idProjeto is not None:
-        update_projeto(projeto.idProjeto,
-                       projeto.idGerente,
-                       projeto.data_inicio,
-                       projeto.nome,
-                       projeto.descricao,
-                       projeto.data_fim,
-                       projeto.idUsuarios)
+        update_db_projeto(projeto.idProjeto,
+                          projeto.idGerente,
+                          projeto.data_inicio,
+                          projeto.nome,
+                          projeto.descricao,
+                          projeto.data_fim)
     else:
         raise ValueError("<EditProjeto> Projeto não encontrado")
 
 def remove_projeto(idProjeto):
     delete_projeto(idProjeto)
 
-def fetch_projetos_usuario(idUsuario):
-    return get_projetos_usuario(idUsuario)
-
 def terminar_projeto(idProjeto):
-    projeto = fetch_projeto(idProjeto)
-    projeto.data_fim = datetime.date.today()
-    edit_projeto(projeto)
+    projeto = get_projeto(idProjeto)
+    if projeto:
+        projeto.data_fim = datetime.date.today()
+        edit_projeto(projeto)
+    else:
+        print(f"Projeto com id {idProjeto} não encontrado")
 
-def fetch_projetos_ativos():
-    projetos = fetch_projetos()
-    projetos = [projeto for projeto in projetos if projeto.data_fim is None]
-    return projetos
+def get_projetos_ativos(idUsuario):
+    projetos_data = fetch_projetos_usuario(idUsuario)
+    projetos = [ProjetoModel(**projeto) for projeto in projetos_data]
+    projetos_ativos = [projeto for projeto in projetos if projeto.data_fim is None]
+    return projetos_ativos
 
-def fetch_projetos_terminados():
-    projetos = fetch_projetos()
+def get_projetos_terminados(idUsuario):
+    projetos_data = fetch_projetos_usuario(idUsuario)
+    projetos = [ProjetoModel(**projeto) for projeto in projetos_data]
     projetos_terminados = [projeto for projeto in projetos if projeto.data_fim is not None]
     return projetos_terminados
+
+def adicionar_usuario(usuario_id, projeto_id):    
+    adicionar_usuario_projeto(usuario_id, projeto_id)
+
+def remover_usuario(idUsuario, idProjeto):
+    remover_usuario_projeto(idUsuario, idProjeto)
