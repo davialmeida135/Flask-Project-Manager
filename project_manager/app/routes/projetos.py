@@ -1,16 +1,13 @@
-
 from flask import Blueprint, redirect, render_template, request, url_for, abort
 from flask_login import login_required, current_user
 from marshmallow import Schema, fields
-from app.service.projeto_service import get_projetos_ativos, add_projeto, get_projeto, edit_projeto as update_projeto, terminar_projeto, get_projetos_terminados, adicionar_usuario, remover_usuario
-from app.service.tarefa_service import get_tarefas_projeto
+from app.service.projeto_service import get_projetos_ativos, add_projeto, fetch_projeto as get_projeto, edit_projeto as update_projeto, terminar_projeto, get_projetos_terminados, adicionar_usuario, remover_usuario
+from app.service.tarefa_service import fetch_tarefas_projeto as get_tarefas_projeto
 from app.service.usuario_service import get_usuarios_projeto, get_usuario_by_username
-
 from app.model.projeto import ProjetoModel
 from app.model.tarefa import TarefaModel
 
 projeto_bp = Blueprint('projeto', __name__)
-
 
 class ProjetoSchema(Schema):
     nome = fields.Str(required=True)
@@ -23,6 +20,8 @@ def create_projeto():
         return render_template("create_projeto.html")
     
     if request.method == 'POST':
+        projeto_schema = ProjetoSchema()
+        projeto_data = projeto_schema.load(request.form)
         
         projeto = ProjetoModel(
             nome=projeto_data['nome'],
@@ -30,13 +29,9 @@ def create_projeto():
             idGerente=current_user.id,
             idUsuarios=[current_user.id]
         )
-        try:
-            add_projeto(projeto)
-        except Exception as e:
-            return render_template("create_projeto.html", error=str(e),projeto=projeto)
+        
+        add_projeto(projeto)
         return redirect(url_for('projeto.listar_projetos'))
-
-#TODO Projetos ativos apenas do usuario logado
 
 @projeto_bp.route("/list", methods=['GET'])
 @login_required
@@ -46,17 +41,17 @@ def listar_projetos():
 
 @projeto_bp.route("/details/<int:id>", methods=['GET'])
 def projeto_detalhes(id):
-    projeto = fetch_projeto(id)
+    projeto = get_projeto(id)
     if projeto is None:
         return abort(404)
-
     tarefas = get_tarefas_projeto(id)
     usuarios = get_usuarios_projeto(id)
     return render_template('projeto_detalhes.html', projeto=projeto, tarefas=tarefas, usuarios=usuarios)
 
+
 @projeto_bp.route("/edit/<int:id>", methods=['GET', 'POST'])
 def edit_projeto_view(id):
-    projeto = fetch_projeto(id)
+    projeto = get_projeto(id)
     if projeto is None:
         return abort(404)
     
@@ -64,7 +59,7 @@ def edit_projeto_view(id):
         return abort(403)
     
     if request.method == 'POST':
-        
+        projeto_schema = ProjetoSchema()
         try:
             projeto_data = projeto_schema.load(request.form)
             projeto.nome = projeto_data['nome']
