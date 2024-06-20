@@ -1,20 +1,12 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash
-from app.service.tarefa_service import add_tarefa, remove_tarefa, get_tarefa, edit_tarefa
+from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
+from app.service.tarefa_service import add_tarefa, remove_tarefa, fetch_tarefa, edit_tarefa
 from marshmallow import Schema, fields
 from app.model.tarefa import TarefaModel
 import datetime
 
 tarefa_bp = Blueprint('tarefa', __name__)
 
-#TODO Definir em uma classe propria, idealmente junto do model
-class TarefaSchema(Schema):
-    nome = fields.Str(required=False)
-    data_criacao = fields.Date(required=False)
-    descricao = fields.Str(required=False)
-    prazo = fields.Date(required=False)
-    status = fields.Str(required=False)
-    idProjeto = fields.Int(required=False)
-    idUsuarios = fields.String( required=False) 
+#TODO Definir em uma classe propria, idealmente junto do model 
 
 @tarefa_bp.route('/create/<int:idProjeto>', methods=['GET'])
 def create_tarefa_view(idProjeto):
@@ -51,14 +43,14 @@ def deletar_tarefa(idTarefa, idProjeto):
 
 @tarefa_bp.route('/details/<int:idTarefa>', methods=['GET'])
 def tarefa_detalhes(idTarefa):
-    tarefa = get_tarefa(idTarefa)
+    tarefa = fetch_tarefa(idTarefa)
     if not tarefa:
         abort(404)
     return render_template('detalhes_tarefa.html', tarefa=tarefa)
 
 @tarefa_bp.route('/edit/<int:idTarefa>', methods=['GET', 'POST'])
 def edit_tarefa_view(idTarefa):
-    tarefa = get_tarefa(idTarefa)
+    tarefa = fetch_tarefa(idTarefa)
     if not tarefa:
         abort(404)
     
