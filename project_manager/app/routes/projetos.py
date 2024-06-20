@@ -1,9 +1,9 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 from marshmallow import Schema, fields
-from app.service.projeto_service import get_projetos_ativos, add_projeto, get_projeto, edit_projeto as update_projeto, terminar_projeto, get_projetos_terminados
+from app.service.projeto_service import get_projetos_ativos, add_projeto, get_projeto, edit_projeto as update_projeto, terminar_projeto, get_projetos_terminados, adicionar_usuario, remover_usuario
 from app.service.tarefa_service import get_tarefas_projeto
-from app.service.usuario_service import get_usuarios_projeto
+from app.service.usuario_service import get_usuarios_projeto, get_usuario_by_username
 from app.model.projeto import ProjetoModel
 from app.model.tarefa import TarefaModel
 
@@ -81,3 +81,30 @@ def terminar_projeto_view(id):
 def listar_projetos_terminados():
     projetos_terminados = get_projetos_terminados(current_user.id)
     return render_template("lista_projetos_terminados.html", projetos=projetos_terminados)
+
+@projeto_bp.route("/add-usuario-projeto/<int:idProjeto>", methods=['GET', 'POST'])
+@login_required
+def add_usuario_projeto_view(idProjeto):
+    if request.method == 'GET':
+        return render_template("add_usuario_projeto.html", idProjeto=idProjeto)
+    
+    if request.method == 'POST':
+        username = request.form.get('username')
+        try:
+            usuario = get_usuario_by_username(username)
+            if usuario:
+                adicionar_usuario(usuario.id, idProjeto)
+                return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))
+            else:
+                error_message = f"Usuário '{username}' não encontrado."
+                return render_template("add_usuario_projeto.html", idProjeto=idProjeto, error=error_message)
+        except Exception as e:
+            error_message = f"Erro ao adicionar usuário ao projeto: {str(e)}"
+            return render_template("add_usuario_projeto.html", idProjeto=idProjeto, error=error_message)
+        
+@projeto_bp.route("/remover-usuario-projeto/<int:idProjeto>", methods=['POST'])
+@login_required
+def remover_usuario_projeto(idProjeto):
+    idUsuario = int(request.form['idUsuario'])
+    remover_usuario(idUsuario, idProjeto)
+    return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))

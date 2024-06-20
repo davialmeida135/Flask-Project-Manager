@@ -75,3 +75,35 @@ def delete_projeto(idProjeto):
     cursor.execute(query, (idProjeto,))
     db.commit()
     cursor.close()
+
+def adicionar_usuario_projeto(idUsuario, idProjeto):
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        
+        query = """
+        INSERT INTO Usuario_Projeto (idUsuario, idProjeto)
+        VALUES (%s, %s)
+        """
+        cursor.execute(query, (idUsuario, idProjeto))
+        
+        db.commit()
+        cursor.close()
+    except Exception as e:
+        raise ValueError(f"Erro ao adicionar usuário ao projeto: {str(e)}")
+
+def remover_usuario_projeto(idUsuario, idProjeto):
+    try:
+        db = get_db()
+        cursor = db.cursor()
+
+        query = """
+        DELETE FROM Usuario_Projeto
+        WHERE idUsuario = %s AND idProjeto = %s
+        """
+        cursor.execute(query, (idUsuario, idProjeto))
+
+        db.commit()
+        cursor.close()
+    except Exception as e:
+        raise ValueError(f"Erro ao remover usuário do projeto: {str(e)}")

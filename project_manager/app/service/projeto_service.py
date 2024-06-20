@@ -5,7 +5,10 @@ from app.db.projeto import (
     update_projeto as update_db_projeto,
     delete_projeto,
     get_projetos_usuario as fetch_projetos_usuario,
+    adicionar_usuario_projeto,
+    remover_usuario_projeto
 )
+from app.service.usuario_service import get_usuario_by_id
 from app.model.projeto import ProjetoModel
 import datetime
 
@@ -79,4 +82,9 @@ def get_projetos_terminados(idUsuario):
     projetos = [ProjetoModel(**projeto) for projeto in projetos_data]
     projetos_terminados = [projeto for projeto in projetos if projeto.data_fim is not None]
     return projetos_terminados
-    
+
+def adicionar_usuario(usuario_id, projeto_id):    
+    adicionar_usuario_projeto(usuario_id, projeto_id)
+
+def remover_usuario(idUsuario, idProjeto):
+    remover_usuario_projeto(idUsuario, idProjeto)

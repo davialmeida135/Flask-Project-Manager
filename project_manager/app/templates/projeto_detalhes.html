@@ -37,9 +37,17 @@
                 <li class="list-group-item">
                     <strong>Nome:</strong> {{ usuario.nome }}<br>
                     <strong>Username:</strong> {{ usuario.username }}
+                    <form method="POST" action="{{ url_for('projeto.remover_usuario_projeto', idProjeto=projeto.idProjeto) }}">
+                        <input type="hidden" name="idUsuario" value="{{ usuario.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm float-right">Remover Usuário</button>
+                    </form>
                 </li>
                 {% endfor %}
             </ul>
+            
+            <div class="mt-3">
+                <a href="{{ url_for('projeto.add_usuario_projeto_view', idProjeto=projeto.idProjeto) }}" class="btn btn-success">Adicionar Usuário</a>
+            </div>
         </div>
 
         <div class="mt-5">
