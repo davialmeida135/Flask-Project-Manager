@@ -65,7 +65,7 @@ def remove_projeto(idProjeto):
     delete_projeto(idProjeto)
 
 def terminar_projeto(idProjeto):
-    projeto = get_projeto(idProjeto)
+    projeto = fetch_projeto(idProjeto)
     if projeto:
         projeto.data_fim = datetime.date.today()
         edit_projeto(projeto)
