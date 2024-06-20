@@ -9,7 +9,7 @@ from app.db.projeto import (
 from app.model.projeto import ProjetoModel
 import datetime
 
-def get_projetos():
+def fetch_projetos():
     projetos_data = get_all_projetos()
     projetos = [ProjetoModel(
         idProjeto=projeto['idProjeto'],
@@ -22,7 +22,7 @@ def get_projetos():
     ) for projeto in projetos_data]
     return projetos
 
-def get_projeto(idProjeto):
+def fetch_projeto(idProjeto):
     projeto_data = get_projeto_by_id(idProjeto)
     if projeto_data:
         return ProjetoModel(
@@ -61,20 +61,20 @@ def edit_projeto(projeto: ProjetoModel):
 def remove_projeto(idProjeto):
     delete_projeto(idProjeto)
 
-def get_projetos_usuario(idUsuario):
+def fetch_projetos_usuario(idUsuario):
     return get_projetos_usuario(idUsuario)
 
 def terminar_projeto(idProjeto):
-    projeto = get_projeto(idProjeto)
+    projeto = fetch_projeto(idProjeto)
     projeto.data_fim = datetime.date.today()
     edit_projeto(projeto)
 
-def get_projetos_ativos():
-    projetos = get_projetos()
+def fetch_projetos_ativos():
+    projetos = fetch_projetos()
     projetos = [projeto for projeto in projetos if projeto.data_fim is None]
     return projetos
 
-def get_projetos_terminados():
-    projetos = get_projetos()
+def fetch_projetos_terminados():
+    projetos = fetch_projetos()
     projetos_terminados = [projeto for projeto in projetos if projeto.data_fim is not None]
     return projetos_terminados
