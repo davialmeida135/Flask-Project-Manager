@@ -40,16 +40,20 @@ def listar_projetos():
     return render_template("lista_projetos.html", projetos=projetos)
 
 @projeto_bp.route("/details/<int:id>", methods=['GET'])
+@login_required
 def projeto_detalhes(id):
     projeto = get_projeto(id)
     if projeto is None:
         return abort(404)
     tarefas = get_tarefas_projeto(id)
     usuarios = get_usuarios_projeto(id)
-    return render_template('projeto_detalhes.html', projeto=projeto, tarefas=tarefas, usuarios=usuarios)
+    projeto_terminado = projeto.data_fim is not None
+    return render_template('projeto_detalhes.html', projeto=projeto, tarefas=tarefas, usuarios=usuarios, projeto_terminado=projeto_terminado)
+
 
 
 @projeto_bp.route("/edit/<int:id>", methods=['GET', 'POST'])
+@login_required
 def edit_projeto_view(id):
     projeto = get_projeto(id)
     if projeto is None:
@@ -73,6 +77,7 @@ def edit_projeto_view(id):
     return render_template("edit_projeto.html", projeto=projeto)
 
 @projeto_bp.route("/terminate/<int:id>", methods=['GET'])
+@login_required
 def terminar_projeto_view(id):
     projeto = get_projeto(id)
     if projeto is None:

@@ -1,7 +1,11 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
+
+from flask_login import login_required, current_user
 from app.service.tarefa_service import add_tarefa, remove_tarefa, fetch_tarefa, edit_tarefa, fetch_usuarios_tarefa
+from app.service.comentario_service import fetch_comentario_by_tarefa, fetch_feedback_usuario_tarefa
 from marshmallow import Schema, fields
 from app.model.tarefa import TarefaModel
+from app.model.comentario import ComentarioModel
 import datetime
 from app.service import usuario_service
 
@@ -10,12 +14,14 @@ tarefa_bp = Blueprint('tarefa', __name__)
 #TODO Definir em uma classe propria, idealmente junto do model 
 
 @tarefa_bp.route('/create/<int:idProjeto>', methods=['GET'])
+@login_required
 def create_tarefa_view(idProjeto):
     usuarios = usuario_service.get_usuarios_projeto(idProjeto)
     error = request.args.get('error', None)
     return render_template('create_tarefa.html', idProjeto=idProjeto, usuarios = usuarios, error = error)
         
 @tarefa_bp.route('/create', methods=['POST'])
+@login_required
 def create_tarefa():
     try:
         nome = request.form.get('nome')
@@ -38,6 +44,7 @@ def create_tarefa():
         return redirect(url_for('tarefa.create_tarefa_view', idProjeto=idProjeto, error = str(e)))
     
 @tarefa_bp.route('/delete/<int:idTarefa>/<int:idProjeto>', methods=['GET'])
+@login_required
 def deletar_tarefa(idTarefa, idProjeto):
     try:
         remove_tarefa(idTarefa)
@@ -46,14 +53,19 @@ def deletar_tarefa(idTarefa, idProjeto):
     return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))
 
 @tarefa_bp.route('/details/<int:idTarefa>', methods=['GET'])
+@login_required
 def tarefa_detalhes(idTarefa):
     tarefa = fetch_tarefa(idTarefa)
     usuarios = fetch_usuarios_tarefa(tarefa.idTarefa)
     if not tarefa:
         abort(404)
-    return render_template('detalhes_tarefa.html', tarefa=tarefa, usuarios=usuarios)
+    comentarios = fetch_comentario_by_tarefa(idTarefa)
+    feedbacks = fetch_feedback_usuario_tarefa(current_user.id, idTarefa)
+     
+    return render_template('detalhes_tarefa.html', tarefa=tarefa, comentarios=comentarios, feedbacks=feedbacks, idTarefa=idTarefa)
 
 @tarefa_bp.route('/edit/<int:idTarefa>', methods=['GET', 'POST'])
+@login_required
 def edit_tarefa_view(idTarefa):
     tarefa = fetch_tarefa(idTarefa)
     if not tarefa:
