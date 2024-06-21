@@ -1,8 +1,9 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
-from app.service.tarefa_service import add_tarefa, remove_tarefa, fetch_tarefa, edit_tarefa
+from app.service.tarefa_service import add_tarefa, remove_tarefa, fetch_tarefa, edit_tarefa, fetch_usuarios_tarefa
 from marshmallow import Schema, fields
 from app.model.tarefa import TarefaModel
 import datetime
+from app.service import usuario_service
 
 tarefa_bp = Blueprint('tarefa', __name__)
 
@@ -10,7 +11,9 @@ tarefa_bp = Blueprint('tarefa', __name__)
 
 @tarefa_bp.route('/create/<int:idProjeto>', methods=['GET'])
 def create_tarefa_view(idProjeto):
-    return render_template('create_tarefa.html', idProjeto=idProjeto)
+    usuarios = usuario_service.get_usuarios_projeto(idProjeto)
+    error = request.args.get('error', None)
+    return render_template('create_tarefa.html', idProjeto=idProjeto, usuarios = usuarios, error = error)
         
 @tarefa_bp.route('/create', methods=['POST'])
 def create_tarefa():
@@ -18,7 +21,7 @@ def create_tarefa():
         nome = request.form.get('nome')
         descricao = request.form.get('descricao')
         prazo = request.form.get('prazo')
-        idUsuarios = request.form.get('idUsuarios')
+        idUsuarios = request.form.getlist('usuarios')
         idProjeto = request.form.get('idProjeto')
 
         data_criacao = datetime.date.today()
@@ -26,12 +29,13 @@ def create_tarefa():
         status = 'Undone'
 
         tarefa = TarefaModel(nome=nome, data_criacao=data_criacao, descricao=descricao, prazo=prazo, status=status, idProjeto=idProjeto, idUsuarios=idUsuarios)
+        print(tarefa.to_dict())
         add_tarefa(tarefa)
 
         return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))
     
     except Exception as e:
-        return redirect(url_for('tarefa.create_tarefa_view', idProjeto=idProjeto))
+        return redirect(url_for('tarefa.create_tarefa_view', idProjeto=idProjeto, error = str(e)))
     
 @tarefa_bp.route('/delete/<int:idTarefa>/<int:idProjeto>', methods=['GET'])
 def deletar_tarefa(idTarefa, idProjeto):
@@ -44,9 +48,10 @@ def deletar_tarefa(idTarefa, idProjeto):
 @tarefa_bp.route('/details/<int:idTarefa>', methods=['GET'])
 def tarefa_detalhes(idTarefa):
     tarefa = fetch_tarefa(idTarefa)
+    usuarios = fetch_usuarios_tarefa(tarefa.idTarefa)
     if not tarefa:
         abort(404)
-    return render_template('detalhes_tarefa.html', tarefa=tarefa)
+    return render_template('detalhes_tarefa.html', tarefa=tarefa, usuarios=usuarios)
 
 @tarefa_bp.route('/edit/<int:idTarefa>', methods=['GET', 'POST'])
 def edit_tarefa_view(idTarefa):

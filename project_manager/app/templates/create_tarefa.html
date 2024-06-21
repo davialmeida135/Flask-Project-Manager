@@ -31,14 +31,29 @@
                 <input type="date" class="form-control" id="prazo" name="prazo" required>
             </div>
 
-            <!-- ID dos Usuários -->
-            <div class="form-group">
-                <label for="idUsuarios">IDs dos Usuários (separados por vírgula):</label>
-                <input type="text" class="form-control" id="idUsuarios" name="idUsuarios" required>
+            <!-- Usuários -->
+            <div class="col-12">
+                <fieldset class="border p-2">
+                    <legend class="">Escolha a quem atribuir a tarefa:</legend>
+                    {% for usuario in usuarios %}
+                    <div class="form-check form-check-inline px-0">
+                        <input value="{{ usuario.id }}" id="{{ usuario.username }}" type="checkbox" name="usuarios"
+                            class="btn-check" autocomplete="off">
+                        <label for="{{ usuario.username }}" class="btn btn-outline-primary">
+                            <span>{{ usuario.username }}</span>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </fieldset>
             </div>
 
             <!-- Botão de Envio -->
             <button type="submit" class="btn btn-primary">Criar Tarefa</button>
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
         </form>
     </div>
 

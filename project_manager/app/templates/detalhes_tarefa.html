@@ -21,7 +21,12 @@
             <li class="list-group-item"><strong>Prazo:</strong> {{ tarefa.prazo }}</li>
             <li class="list-group-item"><strong>Status:</strong> {{ tarefa.status }}</li>
             <li class="list-group-item"><strong>ID do Projeto:</strong> {{ tarefa.idProjeto }}</li>
-            <li class="list-group-item"><strong>IDs dos Usuários:</strong> {{ tarefa.idUsuarios }}</li>
+            <li class="list-group-item">
+                <strong>Colaboradores da tarefa:</strong> 
+                {% for usuario in usuarios %}
+                    {{ usuario.username }},
+                {% endfor %}
+            </li>
         </ul>
 
         <div class="mt-3">
