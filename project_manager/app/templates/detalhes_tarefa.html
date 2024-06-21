@@ -46,7 +46,11 @@
                             <strong>Mensagem:</strong> {{ comentario.mensagem }}<br>
                             <strong>Escritor:</strong> {{ comentario.idUsuario }}<br>
                             <strong>Data:</strong> {{ comentario.data }}<br>
-                            <!-- Adicione mais campos conforme necessário -->
+                            {% if comentario.idUsuario == current_user.id %}
+                            <form action="{{ url_for('comentario.delete_comentario', idComentario=comentario.idComentario, idTarefa=tarefa.idTarefa) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                            </form>
+                            {% endif %}
                         </li>
                         {% endfor %}
                     </ul>
@@ -58,6 +62,11 @@
                             <strong>Mensagem:</strong> {{ feedback.mensagem }}<br>
                             <strong>Escritor:</strong> {{ feedback.idUsuario }}<br>
                             <strong>Data:</strong> {{ feedback.data }}<br>
+                            {% if feedback.idUsuario == current_user.id %}
+                            <form action="{{ url_for('comentario.delete_comentario', idComentario=feedback.idComentario, idTarefa=tarefa.idTarefa) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                            </form>
+                            {% endif %}
                         </li>
                         {% endfor %}
                     </ul>
