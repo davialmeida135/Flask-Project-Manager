@@ -4,10 +4,11 @@ from app.db.tarefa import (
     delete_tarefa,
     get_all_tarefas,
     get_tarefa_by_id,
-    get_usuario_tarefas,
+    get_tarefas_usuario,
     get_user_projeto_tarefas,
-    get_projeto_tarefas,
+    get_tarefas_projeto,
     delete_tarefa_usuarios,
+    get_usuarios_tarefa,
 )
 from app.model.tarefa import TarefaModel
 import datetime
@@ -59,10 +60,13 @@ def fetch_tarefa(idTarefa):
     return None
 
 def fetch_tarefas_usuario(idUsuario):
-    return get_usuario_tarefas(idUsuario)
+    return get_tarefas_usuario(idUsuario)
 
 def fetch_tarefas_usuario_projeto(idUsuario, idProjeto):
     return get_user_projeto_tarefas(idUsuario, idProjeto)
 
 def fetch_tarefas_projeto(idProjeto):
-    return get_projeto_tarefas(idProjeto)
+    return get_tarefas_projeto(idProjeto)
+
+def fetch_usuarios_tarefa(idTarefa):
+    return get_usuarios_tarefa(idTarefa)

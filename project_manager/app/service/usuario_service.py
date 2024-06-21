@@ -50,3 +50,4 @@ def get_usuarios_projeto(id):
     usuarios_data = db_usuario.get_usuarios_by_projeto(id)
     usuarios = [UsuarioModel(id=usuario['idUsuario'], nome=usuario['nome'], username=usuario['username']) for usuario in usuarios_data]
     return usuarios
+

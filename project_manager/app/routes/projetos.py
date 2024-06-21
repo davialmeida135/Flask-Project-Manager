@@ -51,6 +51,7 @@ def projeto_detalhes(id):
     return render_template('projeto_detalhes.html', projeto=projeto, tarefas=tarefas, usuarios=usuarios, projeto_terminado=projeto_terminado)
 
 
+
 @projeto_bp.route("/edit/<int:id>", methods=['GET', 'POST'])
 @login_required
 def edit_projeto_view(id):
@@ -134,3 +135,4 @@ def remover_usuario_projeto(idProjeto):
     idUsuario = int(request.form['idUsuario'])
     remover_usuario(idUsuario, idProjeto)
     return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))
+

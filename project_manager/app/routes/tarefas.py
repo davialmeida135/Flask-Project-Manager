@@ -1,11 +1,13 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, abort
+
 from flask_login import login_required, current_user
-from app.service.tarefa_service import add_tarefa, remove_tarefa, fetch_tarefa, edit_tarefa
+from app.service.tarefa_service import add_tarefa, remove_tarefa, fetch_tarefa, edit_tarefa, fetch_usuarios_tarefa
 from app.service.comentario_service import fetch_comentario_by_tarefa, fetch_feedback_usuario_tarefa
 from marshmallow import Schema, fields
 from app.model.tarefa import TarefaModel
 from app.model.comentario import ComentarioModel
 import datetime
+from app.service import usuario_service
 
 tarefa_bp = Blueprint('tarefa', __name__)
 
@@ -14,7 +16,9 @@ tarefa_bp = Blueprint('tarefa', __name__)
 @tarefa_bp.route('/create/<int:idProjeto>', methods=['GET'])
 @login_required
 def create_tarefa_view(idProjeto):
-    return render_template('create_tarefa.html', idProjeto=idProjeto)
+    usuarios = usuario_service.get_usuarios_projeto(idProjeto)
+    error = request.args.get('error', None)
+    return render_template('create_tarefa.html', idProjeto=idProjeto, usuarios = usuarios, error = error)
         
 @tarefa_bp.route('/create', methods=['POST'])
 @login_required
@@ -23,7 +27,7 @@ def create_tarefa():
         nome = request.form.get('nome')
         descricao = request.form.get('descricao')
         prazo = request.form.get('prazo')
-        idUsuarios = request.form.get('idUsuarios')
+        idUsuarios = request.form.getlist('usuarios')
         idProjeto = request.form.get('idProjeto')
 
         data_criacao = datetime.date.today()
@@ -31,12 +35,13 @@ def create_tarefa():
         status = 'Undone'
 
         tarefa = TarefaModel(nome=nome, data_criacao=data_criacao, descricao=descricao, prazo=prazo, status=status, idProjeto=idProjeto, idUsuarios=idUsuarios)
+        print(tarefa.to_dict())
         add_tarefa(tarefa)
 
         return redirect(url_for('projeto.projeto_detalhes', id=idProjeto))
     
     except Exception as e:
-        return redirect(url_for('tarefa.create_tarefa_view', idProjeto=idProjeto))
+        return redirect(url_for('tarefa.create_tarefa_view', idProjeto=idProjeto, error = str(e)))
     
 @tarefa_bp.route('/delete/<int:idTarefa>/<int:idProjeto>', methods=['GET'])
 @login_required
@@ -51,9 +56,9 @@ def deletar_tarefa(idTarefa, idProjeto):
 @login_required
 def tarefa_detalhes(idTarefa):
     tarefa = fetch_tarefa(idTarefa)
+    usuarios = fetch_usuarios_tarefa(tarefa.idTarefa)
     if not tarefa:
         abort(404)
-    
     comentarios = fetch_comentario_by_tarefa(idTarefa)
     feedbacks = fetch_feedback_usuario_tarefa(current_user.id, idTarefa)
      

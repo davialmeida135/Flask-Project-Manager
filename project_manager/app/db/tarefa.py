@@ -69,7 +69,7 @@ def delete_tarefa(idTarefa):
     cursor.close()
 
 #Todas tarefas do usuario
-def get_usuario_tarefas(idUsuario):
+def get_tarefas_usuario(idUsuario):
     db = get_db()
     cursor = db.cursor(dictionary=True)
     query = "SELECT * FROM Tarefa WHERE idUsuario = %s"
@@ -92,7 +92,7 @@ def get_user_projeto_tarefas(idUsuario, idProjeto):
     return tarefas
 
 #Todas tarefas de um projeto
-def get_projeto_tarefas(idProjeto):
+def get_tarefas_projeto(idProjeto):
     db = get_db()
     cursor = db.cursor(dictionary=True)
     query = "SELECT * FROM Tarefa WHERE idProjeto = %s"
@@ -108,3 +108,43 @@ def delete_tarefa_usuarios(idTarefa):
     cursor.execute(query, (idTarefa,))
     db.commit()
     cursor.close()
+
+def adicionar_usuario_projeto(idProjeto, idUsuario):
+    db = get_db()
+    cursor = db.cursor()
+    
+    query = """
+    INSERT INTO Usuario_Projeto (idUsuario, idProjeto)
+    VALUES (%s, %s)
+    """
+    cursor.execute(query, (idUsuario, idProjeto))
+    
+    db.commit()
+    cursor.close
+
+def remover_usuario_projeto(idProjeto, idUsuario):
+    db = get_db()
+    cursor = db.cursor()
+    
+    query = """
+    DELETE FROM Usuario_Projeto
+    WHERE idProjeto = %s AND idUsuario = %s
+    """
+    cursor.execute(query, (idProjeto, idUsuario))
+    
+    db.commit()
+    cursor.close()
+
+def get_usuarios_tarefa(idTarefa):
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    query = """
+    SELECT Usuario.*
+    FROM Usuario
+    JOIN Usuario_Tarefa ON Usuario.idUsuario = Usuario_Tarefa.idUsuario
+    WHERE Usuario_Tarefa.idTarefa = %s
+    """
+    cursor.execute(query, (idTarefa,))
+    usuarios = cursor.fetchall()
+    cursor.close()
+    return usuarios
