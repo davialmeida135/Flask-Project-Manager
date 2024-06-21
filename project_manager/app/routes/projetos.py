@@ -47,7 +47,8 @@ def projeto_detalhes(id):
         return abort(404)
     tarefas = get_tarefas_projeto(id)
     usuarios = get_usuarios_projeto(id)
-    return render_template('projeto_detalhes.html', projeto=projeto, tarefas=tarefas, usuarios=usuarios)
+    projeto_terminado = projeto.data_fim is not None
+    return render_template('projeto_detalhes.html', projeto=projeto, tarefas=tarefas, usuarios=usuarios, projeto_terminado=projeto_terminado)
 
 
 @projeto_bp.route("/edit/<int:id>", methods=['GET', 'POST'])
