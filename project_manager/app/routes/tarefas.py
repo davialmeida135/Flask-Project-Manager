@@ -12,10 +12,12 @@ tarefa_bp = Blueprint('tarefa', __name__)
 #TODO Definir em uma classe propria, idealmente junto do model 
 
 @tarefa_bp.route('/create/<int:idProjeto>', methods=['GET'])
+@login_required
 def create_tarefa_view(idProjeto):
     return render_template('create_tarefa.html', idProjeto=idProjeto)
         
 @tarefa_bp.route('/create', methods=['POST'])
+@login_required
 def create_tarefa():
     try:
         nome = request.form.get('nome')
@@ -37,6 +39,7 @@ def create_tarefa():
         return redirect(url_for('tarefa.create_tarefa_view', idProjeto=idProjeto))
     
 @tarefa_bp.route('/delete/<int:idTarefa>/<int:idProjeto>', methods=['GET'])
+@login_required
 def deletar_tarefa(idTarefa, idProjeto):
     try:
         remove_tarefa(idTarefa)
@@ -57,6 +60,7 @@ def tarefa_detalhes(idTarefa):
     return render_template('detalhes_tarefa.html', tarefa=tarefa, comentarios=comentarios, feedbacks=feedbacks, idTarefa=idTarefa)
 
 @tarefa_bp.route('/edit/<int:idTarefa>', methods=['GET', 'POST'])
+@login_required
 def edit_tarefa_view(idTarefa):
     tarefa = fetch_tarefa(idTarefa)
     if not tarefa:
