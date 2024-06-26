@@ -11,6 +11,7 @@ class UsuarioSchema(Schema):
     username = fields.Str(required=False)
     password = fields.Str(required=False)
     data_nascimento = fields.Str(required=False)
+    confirm_password = fields.Str(required=False)
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -18,7 +19,7 @@ def register():
     if request.method == 'POST':
         usuario_schema = UsuarioSchema()
         usuario_data = usuario_schema.load(request.form)
-            
+        
         try:
             register_usuario(usuario_data)
         except Exception as e:

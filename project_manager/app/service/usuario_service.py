@@ -3,6 +3,8 @@ import app.db.usuario as db_usuario
 from app.model.usuario import UsuarioModel
 
 def register_usuario(usuario):
+    if (usuario['password'] != usuario['confirm_password']):
+        raise ValueError("Passwords do not match")
     
     if len(usuario['username'])<4:
         raise ValueError("Username must be at least 4 characters")
