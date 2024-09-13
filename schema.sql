@@ -18,7 +18,7 @@ USE `project_manager` ;
 -- Table `project_manager`.`Usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `project_manager`.`Usuario` (
-  `idUsuario` INT NOT NULL,
+  `idUsuario` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(45) NULL,
   `username` VARCHAR(45) NOT NULL,
   `nascimento` DATE NULL,
@@ -28,25 +28,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `project_manager`.`Gerente`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `project_manager`.`Gerente` (
-  `idUsuario` INT NOT NULL,
-  PRIMARY KEY (`idUsuario`),
-  INDEX `fk_Gerente_Usuario1_idx` (`idUsuario` ASC) VISIBLE,
-  CONSTRAINT `fk_Gerente_Usuario1`
-    FOREIGN KEY (`idUsuario`)
-    REFERENCES `project_manager`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `project_manager`.`Projeto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `project_manager`.`Projeto` (
-  `idProjeto` INT NOT NULL,
+  `idProjeto` INT NOT NULL AUTO_INCREMENT,
   `idGerente` INT NOT NULL,
   `data_inicio` DATE NULL,
   `nome` VARCHAR(45) NULL,
@@ -57,8 +42,8 @@ CREATE TABLE IF NOT EXISTS `project_manager`.`Projeto` (
   CONSTRAINT `fk_Projeto_Usuario1`
     FOREIGN KEY (`idGerente`)
     REFERENCES `project_manager`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -66,7 +51,7 @@ ENGINE = InnoDB;
 -- Table `project_manager`.`Tarefa`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `project_manager`.`Tarefa` (
-  `idTarefa` INT NOT NULL,
+  `idTarefa` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(45) NULL,
   `data_criacao` DATE NULL,
   `descricao` VARCHAR(45) NULL,
@@ -78,8 +63,8 @@ CREATE TABLE IF NOT EXISTS `project_manager`.`Tarefa` (
   CONSTRAINT `fk_Tarefa_Projeto1`
     FOREIGN KEY (`idProjeto`)
     REFERENCES `project_manager`.`Projeto` (`idProjeto`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -87,8 +72,8 @@ ENGINE = InnoDB;
 -- Table `project_manager`.`Comentario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `project_manager`.`Comentario` (
-  `idComentario` INT NOT NULL,
-  `mensagem` VARCHAR(45) NULL,
+  `idComentario` INT NOT NULL AUTO_INCREMENT,
+  `mensagem` VARCHAR(200) NULL,
   `idUsuario` INT NOT NULL,
   `idTarefa` INT NOT NULL,
   `idDestinatario` INT NULL,
@@ -99,18 +84,18 @@ CREATE TABLE IF NOT EXISTS `project_manager`.`Comentario` (
   CONSTRAINT `fk_Comentario_Usuario1`
     FOREIGN KEY (`idUsuario`)
     REFERENCES `project_manager`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Comentario_Tarefa1`
     FOREIGN KEY (`idTarefa`)
     REFERENCES `project_manager`.`Tarefa` (`idTarefa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Comentario_Usuario2`
     FOREIGN KEY (`idDestinatario`)
     REFERENCES `project_manager`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -125,13 +110,13 @@ CREATE TABLE IF NOT EXISTS `project_manager`.`Usuario_Projeto` (
   CONSTRAINT `fk_Participa_Usuario1`
     FOREIGN KEY (`idUsuario`)
     REFERENCES `project_manager`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Participa_Projeto1`
     FOREIGN KEY (`idProjeto`)
     REFERENCES `project_manager`.`Projeto` (`idProjeto`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -146,13 +131,13 @@ CREATE TABLE IF NOT EXISTS `project_manager`.`Usuario_Tarefa` (
   CONSTRAINT `fk_Recebe_Usuario`
     FOREIGN KEY (`idUsuario`)
     REFERENCES `project_manager`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Recebe_Tarefa1`
     FOREIGN KEY (`idTarefa`)
     REFERENCES `project_manager`.`Tarefa` (`idTarefa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -161,7 +146,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `project_manager`.`Credenciais` (
   `username` VARCHAR(45) NOT NULL,
-  `senha` VARCHAR(45) NOT NULL,
+  `senha` VARCHAR(300) NOT NULL,
   PRIMARY KEY (`username`),
   CONSTRAINT `fk_Credenciais_Usuario1`
     FOREIGN KEY (`username`)
